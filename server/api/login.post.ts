@@ -1,10 +1,10 @@
 import db from '~/server/sql'
 // @ts-ignore
-
+import bcrypt from 'bcrypt';
 
 export default defineEventHandler(async (event) => {
     let body = await readBody(event);
-    if (!body.login || !body.password) {
+    if (!body.login || body.login === '' || !body.password || body.password === '') {
         setResponseStatus(event, 400)
         return {
             error: "Login or password missing"
@@ -16,10 +16,9 @@ export default defineEventHandler(async (event) => {
         // @ts-ignore
         if (rows.length > 0) {
             // @ts-ignore
-            let result = body.password === rows[0].password
+            let result = await bcrypt.compare(body.password, rows[0].password)
+            // @ts-ignore
             if (result) {
-                // @ts-ignore
-
                 return {
                     connected: "true",
                     // @ts-ignore

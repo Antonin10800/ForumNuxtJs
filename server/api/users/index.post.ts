@@ -1,6 +1,6 @@
 import db from '~/server/sql'
 // @ts-ignore
-
+import bcrypt from 'bcrypt';
 
 export default defineEventHandler(async (event) => {
     let body = await readBody(event);
@@ -20,13 +20,11 @@ export default defineEventHandler(async (event) => {
                 error: "Login already exists"
             }
         } else {
-            //let hashedPassword = await bcrypt.hash(body.password, 10);
-            // await db.execute(
-            //     "INSERT INTO users (login, password) VALUES (?, ?)", [body.login, hashedPassword]
-            // )
+            let hashedPassword = await bcrypt.hash(body.password, 10);
             await db.execute(
-                "INSERT INTO users (login, password, admin) VALUES (?, ?, ?)", [body.login, body.password, body.admin]
+                "INSERT INTO users (login, password) VALUES (?, ?)", [body.login, hashedPassword]
             )
+            setResponseStatus(event, 201)
             return {
                 userAdded: "yes"
             }
