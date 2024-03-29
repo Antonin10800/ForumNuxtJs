@@ -36,8 +36,9 @@ export default {
 </script>
 
 <template>
+  <Header />
   <v-container>
-    <Header />
+
     <v-row>
       <v-col class="justify-center">
         <v-card class="mx-auto my-2"
@@ -45,7 +46,7 @@ export default {
           <v-card-title>
             <h1 class="text-center mb-8">Forums</h1>
           </v-card-title>
-          <v-card-text>
+          <v-card-text v-if="sujets">
             <v-list class="text-center">
 
                 <v-list-item v-for="sujet in sujets" :key="sujet.id" class="mb-4">
@@ -59,6 +60,10 @@ export default {
 
             </v-list>
           </v-card-text>
+            <v-card-text v-else>
+              <p class="text-center">Aucun sujet</p>
+            </v-card-text>
+          <v-btn @click="createSujet" color="secondary">Créer un sujet</v-btn>
           <v-pagination
               v-model=page
               :length="pageMax"
@@ -68,7 +73,6 @@ export default {
     </v-row>
 
   </v-container>
-  <div v-if="sujets"></div>
 
 </template>
 
