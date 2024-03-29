@@ -11,17 +11,26 @@ export default {
       sujets: null,
       id: this.$route.params.idForums,
       page: 1,
+      pageMax: null
     };
   },
-  async mounted() {
-    try {
-      this.sujets = await $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`);
-    this.sujets = this.sujets.data
-      console.log(this.sujets)
-    } catch (error) {
-      console.error('Erreur lors de la récupération des forums :', error);
-    }
+  methods: {
+    async getSujets() {
+      try {
+        this.sujets = await $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`);
+        this.pageMax = this.sujets.pageMax
+        console.log(this.pageMax)
+        this.sujets = this.sujets.data
+        console.log(this.sujets)
+      } catch (error) {
+        console.error('Erreur lors de la récupération des forums :', error);
+      }
+    },
   },
+  async mounted() {
+    await this.getSujets()
+  },
+
 }
 
 </script>
@@ -50,9 +59,14 @@ export default {
 
             </v-list>
           </v-card-text>
+          <v-pagination
+              v-model=page
+              :length="pageMax"
+              @click="getSujets"/>
         </v-card>
       </v-col>
     </v-row>
+
   </v-container>
   <div v-if="sujets"></div>
 
