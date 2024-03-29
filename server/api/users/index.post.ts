@@ -10,18 +10,22 @@ export default defineEventHandler(async (event) => {
             error: "Information missing"
         }
     } else {
-        const [rows] = await db.connection.execute(
+        const [rows] = await db.execute(
             "SELECT * FROM users WHERE login = ?", [body.login]
         )
+        // @ts-ignore
         if (rows.length > 0) {
             setResponseStatus(event, 401)
             return {
                 error: "Login already exists"
             }
         } else {
-            // let hashedPassword = await bcrypt.hash(body.password, 10);
-            await db.connection.execute(
-                "INSERT INTO users (login, password) VALUES (?, ?)", [body.login, hashedPassword]
+            //let hashedPassword = await bcrypt.hash(body.password, 10);
+            // await db.execute(
+            //     "INSERT INTO users (login, password) VALUES (?, ?)", [body.login, hashedPassword]
+            // )
+            await db.execute(
+                "INSERT INTO users (login, password, admin) VALUES (?, ?, ?)", [body.login, body.password, body.admin]
             )
             return {
                 userAdded: "yes"

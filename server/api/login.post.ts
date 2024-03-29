@@ -10,9 +10,10 @@ export default defineEventHandler(async (event) => {
             error: "Login or password missing"
         }
     } else {
-        const [rows] = await db.connection.execute(
+        const [rows] = await db.execute(
             "SELECT * FROM users WHERE login = ?", [body.login]
         )
+        // @ts-ignore
         if (rows.length > 0) {
             // @ts-ignore
             let result = body.password === rows[0].password

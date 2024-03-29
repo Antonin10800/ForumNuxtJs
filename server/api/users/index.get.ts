@@ -1,6 +1,6 @@
-//je voudrais import ma connexion à la base de donnée et ma function getListe depuis /serveur/index.ts
-
 import db from '~/server/sql'
 export default defineEventHandler(async (event) => {
-    return db.getList('users')
+    let query = `SELECT * FROM users`
+    let [rows, _] = await db.execute(query)
+    return rows
 });

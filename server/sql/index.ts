@@ -20,7 +20,7 @@ async function getList(table : string) {
 async function getOne(table : string, event: any) {
     if (event.context.params && event.context.params.id) {
         let id = event.context.params.id
-        const query = `SELECT * FROM users WHERE id = ?`
+        const query = `SELECT * FROM ${table} WHERE id = ?`
         let [rows, _] = await connection.execute(query, [id])
         if (Array.isArray(rows) && rows.length === 0) {
             setResponseStatus(event, 404)
@@ -36,8 +36,4 @@ async function getOne(table : string, event: any) {
         }
     }
 }
-export default {
-    connection,
-    getList,
-    getOne
-}
+export default connection
