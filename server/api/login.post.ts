@@ -1,5 +1,6 @@
 import db from '~/server/sql'
-import bcrypt from 'bcryptjs';
+// @ts-ignore
+
 
 export default defineEventHandler(async (event) => {
     let body = await readBody(event);
@@ -13,19 +14,21 @@ export default defineEventHandler(async (event) => {
             "SELECT * FROM users WHERE login = ?", [body.login]
         )
         if (rows.length > 0) {
-            if (rows[0].password === body.password) {
-                setResponseStatus(event, 200)
+            // @ts-ignore
+            let result = body.password === rows[0].password
+            if (result) {
+                // @ts-ignore
+
                 return {
                     connected: "true",
+                    // @ts-ignore
                     user: rows[0]
-                }
-            } else {
-                setResponseStatus(event, 401)
-                return {
-                    connected: "false"
                 }
             }
         }
-
+        setResponseStatus(event, 401)
+        return {
+            connected: "false"
+        }
     }
 });

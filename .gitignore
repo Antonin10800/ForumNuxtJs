@@ -18,6 +18,5 @@ logs
 .fleet
 .idea
 
-.nuxt
 package-lock.json
 db/data
