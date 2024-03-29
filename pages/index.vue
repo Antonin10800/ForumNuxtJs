@@ -12,9 +12,11 @@
           >
             <nuxt-link :to="`/forums/${forum.id}`" class="text-decoration-none text-h6">
               <v-card
-                  subtitle="This is a subtitle"
+                  class="mx-auto my-2"
+                  max-width="1000"
+                  :subtitle="forum.nbSujets"
                   :title ="forum.title"
-                  width="400"
+                  link
               ></v-card>
             </nuxt-link>
           </v-list-item>
@@ -32,7 +34,7 @@ export default {
   },
   data() {
     return {
-      forums: []
+      forums: [],
     };
   },
   async mounted() {
@@ -47,7 +49,5 @@ export default {
 </script>
 
 <style>
-.text-h6 {
-  color: #3F51B5;
-}
+
 </style>
