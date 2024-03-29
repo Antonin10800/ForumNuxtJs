@@ -1,6 +1,8 @@
-import db from '~/server/sql'
+import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 
-export default defineEventHandler(async (event) => {
+
+export default defineWrappedResponseHandler(async (event) => {
+    const db = event.context.mysql
     if (event.context.params && event.context.params.id) {
         let id = event.context.params.id
         const query = `SELECT * FROM users WHERE id = ?`

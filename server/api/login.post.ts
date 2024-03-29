@@ -1,8 +1,9 @@
-import db from '~/server/sql'
 // @ts-ignore
 import bcrypt from 'bcrypt';
+import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 
-export default defineEventHandler(async (event) => {
+export default defineWrappedResponseHandler(async (event) => {
+    const db = event.context.mysql
     let body = await readBody(event);
     if (!body.login || body.login === '' || !body.password || body.password === '') {
         setResponseStatus(event, 400)

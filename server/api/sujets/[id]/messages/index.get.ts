@@ -1,6 +1,7 @@
-import db from '~/server/sql'
+import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 
-export default defineEventHandler(async (event) => {
+export default defineWrappedResponseHandler(async (event) => {
+    const db = event.context.mysql
   if (event.context.params){
       if(!event.context.params.id){
           setResponseStatus(event, 400)

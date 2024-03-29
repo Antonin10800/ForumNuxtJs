@@ -1,6 +1,8 @@
-import db from '~/server/sql'
+import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 
-export default defineEventHandler(async (event) => {
+
+export default defineWrappedResponseHandler(async (event) => {
+    const db = event.context.mysql
     if (event.context.params && event.context.params.idForum) {
         let NbParPage = 5
         if(event.context.params.idForum === ''){
@@ -10,9 +12,9 @@ export default defineEventHandler(async (event) => {
             }
         }
         // @ts-ignore
-        var page = parseInt(getQuery(event).page) || 1
+        let page = parseInt(getQuery(event).page) || 1
 
-        var id = event.context.params.idForum
+        let id = event.context.params.idForum
         // @ts-ignore
         let IDpage = page * NbParPage
         let queryNombreSujets = "SELECT COUNT(*) as nombre_sujets FROM sujets WHERE forum_id = ?"
