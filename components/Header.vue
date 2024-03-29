@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <v-app-bar>
+  <v-app-bar color="secondary">
 
     <v-app-bar-title>NuxtForum</v-app-bar-title>
 
