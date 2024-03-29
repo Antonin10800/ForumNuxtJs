@@ -3,7 +3,7 @@ import db from '~/server/sql'
 export default defineEventHandler(async (event) => {
   if (event.context.params){
       if(!event.context.params.id){
-          setResponseStatus(event, 404)
+          setResponseStatus(event, 400)
           return{
                 error: "id not found"
           }
