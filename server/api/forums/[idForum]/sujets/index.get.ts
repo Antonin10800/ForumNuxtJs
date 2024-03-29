@@ -26,7 +26,7 @@ export default defineWrappedResponseHandler(async (event) => {
                 error: "page not found"
             }
         }
-        let query = "SELECT * FROM sujets WHERE forum_id = ? ORDER BY date LIMIT ? OFFSET ?"
+        let query = "SELECT *, users.login FROM sujets LEFT JOIN forum.users ON users.id = sujets.author_id WHERE forum_id = ? ORDER BY date LIMIT ? OFFSET ?"
         let [rows, _] = await db.execute(query, [id, NbParPage, IDpage])
 
 
@@ -36,14 +36,14 @@ export default defineWrappedResponseHandler(async (event) => {
                 error: `Forums not found : ${id}`
             }
         }
-        let json = {
+        let nombreSujets = rowsNombreSujets[0].nombre_sujets
+        return {
             page,
             pageMax,
-            rowsNombreSujets,
+            nombreSujets,
             data: rows
 
         }
-        return json
     } else {
         setResponseStatus(event, 400)
         return {
