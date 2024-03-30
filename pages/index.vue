@@ -1,5 +1,4 @@
 <template>
-  <Header></Header>
   <v-container>
     <v-row>
       <v-col class="justify-center">
