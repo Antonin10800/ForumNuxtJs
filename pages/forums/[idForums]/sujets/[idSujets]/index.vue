@@ -34,7 +34,6 @@ export default {
 </script>
 
 <template>
-  <Header></Header>
   <div v-if="messages">
     <v-card
         class="mx-auto"

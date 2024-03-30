@@ -2,9 +2,11 @@
 import Header from '~/components/Header.vue'
 import {toArray} from "#app/utils.js";
 import {th} from "vuetify/locale";
+import CreationSujet from "~/components/CreationSujet.vue";
 export default {
   components: {
-    Header
+    Header,
+    CreationSujet
   },
   data() {
     return {
@@ -36,10 +38,12 @@ export default {
 </script>
 
 <template>
-  <Header />
+
+<CreationSujet></CreationSujet>
   <v-container>
 
     <v-row>
+      <v-card-title>Création de sujet</v-card-title>
       <v-col class="justify-center">
         <v-card class="mx-auto my-2"
                 max-width="1000">
