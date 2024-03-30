@@ -22,12 +22,19 @@ export default defineWrappedResponseHandler(async (event) => {
             }
         } else {
             let hashedPassword = await bcrypt.hash(body.password, 10);
-            await db.execute(
+            let [result] = await db.execute(
                 "INSERT INTO users (login, password) VALUES (?, ?)", [body.login, hashedPassword]
             )
-            setResponseStatus(event, 201)
-            return {
-                userAdded: "yes"
+            if (result.affectedRows === 1) {
+                setResponseStatus(event, 201)
+                return {
+                    message: "User created"
+                }
+            } else {
+                setResponseStatus(event, 500)
+                return {
+                    error: "User not created"
+                }
             }
         }
     }
