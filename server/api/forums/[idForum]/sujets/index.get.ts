@@ -12,7 +12,8 @@ export default defineWrappedResponseHandler(async (event) => {
         let NbParPage = 5
         let page = parseInt(<string>getQuery(event).page) || 1
         let id = event.context.params.idForum
-        let IDpage = (page-1) * NbParPage
+        let IDpage = (page-1)
+            * NbParPage
 
         let queryNombreSujets = "SELECT COUNT(*) as nombre_sujets FROM sujets WHERE forum_id = ?"
         let [rowsNombreSujets, __] = await db.execute(queryNombreSujets, [id])
@@ -24,8 +25,28 @@ export default defineWrappedResponseHandler(async (event) => {
                 error: "page not found"
             }
         }
-        let query = "SELECT sujets.id, sujets.title, sujets.date, sujets.forum_id, users.login FROM sujets LEFT JOIN forum.users ON users.id = sujets.author_id WHERE forum_id = ? ORDER BY date LIMIT ? OFFSET ?"
+        let query = `SELECT sujets.id, sujets.title, sujets.date, sujets.forum_id, users.login
+                            FROM sujets 
+                                LEFT JOIN forum.users ON users.id = sujets.author_id 
+                            WHERE forum_id = ? 
+                            ORDER BY date 
+                            LIMIT ? OFFSET ?`
         let [rows, _] = await db.execute(query, [id, NbParPage, IDpage])
+
+        //pour chaque sujet, je veux récupérer le nom du user qui a posté le dernier message
+        for (let i = 0; i < rows.length; i++) {
+            let query = `SELECT users.login 
+                            FROM messages 
+                                LEFT JOIN users ON users.id = messages.author_id 
+                            WHERE sujet_id = ? 
+                            ORDER BY date DESC 
+                            LIMIT 1`
+            let [rows2, _] = await db.execute(query, [rows[i].id])
+            if (Array.isArray(rows2) && rows2.length > 0) {
+                rows[i].last_message_author = rows2[0].login
+            }
+
+        }
 
         if (Array.isArray(rows) && rows.length === 0) {
             setResponseStatus(event, 404)
