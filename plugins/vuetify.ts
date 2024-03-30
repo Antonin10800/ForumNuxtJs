@@ -11,7 +11,7 @@ const myCustomLightTheme = {
         surface: '#FFFFFF',
         'surface-bright': '#FFFFFF',
         'surface-light': '#EEEEEE',
-        'surface-variant': '#424242',
+        'surface-variant': '#000000',
         'on-surface-variant': '#EEEEEE',
         primary: '#1867C0',
         'primary-darken-1': '#1F5592',
@@ -21,6 +21,7 @@ const myCustomLightTheme = {
         info: '#2196F3',
         success: '#4CAF50',
         warning: '#FB8C00',
+        color : '#000000',
     },
     variables: {
         'border-color': '#000000',

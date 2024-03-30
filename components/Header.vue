@@ -17,6 +17,9 @@ export default {
     Deconnexion() {
       console.log('Deconnexion')
     },
+    Home() {
+      this.$router.push('/');
+    }
   }
 }
 </script>
@@ -24,7 +27,11 @@ export default {
 <template>
   <v-app-bar color="secondary">
 
-    <v-app-bar-title>NuxtForum</v-app-bar-title>
+    <v-app-bar-title>
+
+    <v-btn @click="Home">
+      NuxtForum </v-btn></v-app-bar-title>
+
 
     <v-spacer></v-spacer>
     <v-btn @click="Connexion">Connexion
