@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS messages (
 
 -- Insertion des utilisateurs
 INSERT INTO users (login, password, admin) VALUES
-                                                ('user', 'motdepasse', FALSE),
-                                                ('admin', 'admin', TRUE);
+                                                ('user', '$2b$10$J5SmCON7UkTyyv4Qq.8tmOWKYeuPJQ.HPO0xEiazhp0yhSRImzZu6', FALSE),
+                                                ('admin', '$2b$10$9xOJiLAXiAjigbS95RjS8OYfDIeccFeGqNbnLs2clk6z4tak0A5Ly', TRUE);
 
 -- Insertion des forums
 INSERT INTO forums (title, is_locked, author_id) VALUES

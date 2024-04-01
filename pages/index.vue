@@ -3,6 +3,7 @@
     <v-row>
       <v-col class="justify-center">
         <h1 class="text-center mb-8">ForumNuxt</h1>
+        <p>{{session.value}}</p>
         <v-list class="text-center">
           <v-list-item
               v-for="forum in forums"
@@ -26,24 +27,32 @@
 </template>
 
 <script setup>
-definePageMeta({
-  middleware: async function(to, from) {
-    const { session, refresh } = await useSession();
-    await refresh();
-    console.log(session.value.login === '');
-  },
-});
+
+// definePageMeta({
+//   middleware: async function(to, from) {
+//     const { session, refresh } = await useSession();
+//     await refresh();
+//     const connected = ref(false);
+//     connected.value = !(session.value.login === '');
+//     console.log(connected.value.login)
+//   },
+// });
+
 </script>
 
 <script>
 import Header from '@/components/Header.vue'
 
 export default {
+  props: {
+    connected: Boolean,
+  },
   components: {
     Header
   },
   data() {
     return {
+      session: useSession(),
       forums: [],
     };
   },

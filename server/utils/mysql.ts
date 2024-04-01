@@ -20,6 +20,6 @@ export const defineWrappedResponseHandler = <T extends
             return response
         } catch (err) {
             // Error handling
-            return { err }
+            return err
         }
     })

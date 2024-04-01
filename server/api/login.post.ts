@@ -14,22 +14,22 @@ export default defineWrappedResponseHandler(async (event) => {
         const [rows] = await db.execute(
             "SELECT * FROM users WHERE login = ?", [body.login]
         )
-        // @ts-ignore
         if (rows.length > 0) {
-            // @ts-ignore
             let result = await bcrypt.compare(body.password, rows[0].password)
-            // @ts-ignore
             if (result) {
                 return {
-                    connected: "true",
-                    // @ts-ignore
-                    user: rows[0]
+                    connected: true,
+                    user: {
+                        id: rows[0].id,
+                        login: rows[0].login,
+                        admin: rows[0].admin
+                    }
                 }
             }
         }
         setResponseStatus(event, 401)
         return {
-            connected: "false"
+            connected: false
         }
     }
 });
