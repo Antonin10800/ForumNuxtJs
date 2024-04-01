@@ -2,11 +2,11 @@
 import Header from '~/components/Header.vue'
 import {toArray} from "#app/utils.js";
 import {th} from "vuetify/locale";
-import CreationSujet from "~/components/CreationSujet.vue";
+// import CreationSujet from "~/components/CreationSujet.vue";
 export default {
   components: {
     Header,
-    CreationSujet
+    // CreationSujet
   },
   data() {
     return {
@@ -21,9 +21,7 @@ export default {
       try {
         this.sujets = await $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`);
         this.pageMax = this.sujets.pageMax
-        console.log(this.pageMax)
         this.sujets = this.sujets.data
-        console.log(this.sujets)
       } catch (error) {
         console.error('Erreur lors de la récupération des forums :', error);
       }
@@ -39,7 +37,7 @@ export default {
 
 <template>
 
-<CreationSujet></CreationSujet>
+<!--<CreationSujet></CreationSujet>-->
   <v-container>
 
     <v-row>
@@ -67,7 +65,7 @@ export default {
             <v-card-text v-else>
               <p class="text-center">Aucun sujet</p>
             </v-card-text>
-          <v-btn @click="createSujet" color="secondary">Créer un sujet</v-btn>
+          <v-btn @click="" color="secondary">Créer un sujet</v-btn>
           <v-pagination
               v-model=page
               :length="pageMax"

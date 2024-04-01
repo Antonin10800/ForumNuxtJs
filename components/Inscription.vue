@@ -1,3 +1,44 @@
+<script >
+export default {
+  props: {
+    display: Boolean,
+  },
+  data() {
+    return {
+      visible: false,
+      valid: false,
+      /**
+       * Si isLogged est remplit, l'utilisateur viens pour modifier son profil
+       * Si isLogged est vide, l'utilisateur viens pour s'inscrire
+       */
+      isLogged: '',
+      username: '',
+      password: '',
+      rules: {
+        required: (value) => !!value || 'Champ requis.',
+      },
+    }
+  },
+  watch: {
+    display(newVal) {
+      this.visible = newVal;
+    },
+    visible(newVal) {
+      this.$emit('update:inscription', newVal);
+    }
+  },
+  methods: {
+    submit() {
+      if (this.valid) {
+        this.$emit('inscriptionvalidated');
+        this.$emit('update:inscription', false);
+        console.log('Inscription validée')
+        //todo: call api
+      }},
+  },
+}
+</script>
+
 <template>
   <v-dialog v-model="visible">
     <v-card>
@@ -24,44 +65,6 @@
     </v-card>
   </v-dialog>
 </template>
-
-<script >
-
-export default {
-
-  data() {
-    return {
-      visible: true,
-      valid: false,
-      /**
-       * Si isLogged est remplit, l'utilisateur viens pour modifier son profil
-       * Si isLogged est vide, l'utilisateur viens pour s'inscrire
-       */
-      isLogged: '',
-      username: '',
-      password: '',
-      rules: {
-        required: (value) => !!value || 'Champ requis.',
-      },
-    }
-  },
-
-  methods: {
-    submit() {
-      if (this.valid) {
-        this.$emit('inscriptionvalidated');
-        this.visible = false
-        console.log('Inscription validée')
-        //todo: call api
-      }},
-
-
-  },
-
-
-}
-
-</script>
 
 <style scoped>
 

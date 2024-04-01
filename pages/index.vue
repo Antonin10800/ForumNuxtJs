@@ -25,8 +25,19 @@
   </v-container>
 </template>
 
+<script setup>
+definePageMeta({
+  middleware: async function(to, from) {
+    const { session, refresh } = await useSession();
+    await refresh();
+    console.log(session.value.login === '');
+  },
+});
+</script>
+
 <script>
 import Header from '@/components/Header.vue'
+
 export default {
   components: {
     Header
@@ -39,7 +50,6 @@ export default {
   async mounted() {
     try {
       this.forums = await $fetch('api/forums');
-      console.log(this.forums)
     } catch (error) {
       console.error('Erreur lors de la récupération des forums :', error);
     }

@@ -12,19 +12,15 @@ export default defineWrappedResponseHandler(async (event) => {
         let NbParPage = 5
         let page = parseInt(<string>getQuery(event).page) || 1
         let id = event.context.params.idForum
-        let IDpage = (page-1)
-            * NbParPage
 
         let queryNombreSujets = "SELECT COUNT(*) as nombre_sujets FROM sujets WHERE forum_id = ?"
         let [rowsNombreSujets, __] = await db.execute(queryNombreSujets, [id])
 
         let pageMax = Math.ceil(rowsNombreSujets[0].nombre_sujets / NbParPage) - 1
         if (page > pageMax) {
-            setResponseStatus(event, 404)
-            return {
-                error: "page not found"
-            }
+            page = pageMax
         }
+        let IDpage = (page-1) * NbParPage
         let query = `SELECT sujets.id, sujets.title, sujets.date, sujets.forum_id, users.login
                             FROM sujets 
                                 LEFT JOIN forum.users ON users.id = sujets.author_id 
@@ -51,7 +47,7 @@ export default defineWrappedResponseHandler(async (event) => {
         if (Array.isArray(rows) && rows.length === 0) {
             setResponseStatus(event, 404)
             return {
-                error: `Forums not found : ${id}`
+                error: `Not sujets for this forum : ${id}`
             }
         }
         let nombreSujets = rowsNombreSujets[0].nombre_sujets

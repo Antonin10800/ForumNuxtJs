@@ -13,7 +13,8 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
-    "nuxt-server-utils"
+    "nuxt-server-utils",
+    '@sidebase/nuxt-session',
   ],
   nitro: {
     esbuild: {
