@@ -7,6 +7,7 @@ export default {
     return {
       username: 'user2',
       password: 'password',
+      isAdmin: false,
       admin: false,
       visible: false,
       valid: false,
@@ -14,6 +15,11 @@ export default {
         required: (value) => !!value || 'Champ requis.',
       },
     }
+  },
+  async monted() {
+    const {session, refresh} = await useSession();
+    await refresh();
+    if(session.value.admin !== undefined) this.isAdmin = session.value.admin;
   },
   watch: {
     display(newVal) {
@@ -72,7 +78,7 @@ export default {
               type="password"
               required
           ></v-text-field>
-          <v-checkbox v-if="false"
+          <v-checkbox v-if="isAdmin"
               v-model="admin"
               label="Administrateur"
           ></v-checkbox>
