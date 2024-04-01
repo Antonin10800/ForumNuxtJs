@@ -10,28 +10,25 @@
 ### Routes API : 
 
 GET : 
-- /users/ID
-- /users
-- /forums/ID
-- /forums
-- /sujet/ID
-- /sujets
-- /messages/ID
-- /message
-- /forums/ID/sujets/ID/messages/ID
-- /forums/ID/sujets/ID/messages
-- /forums/ID/sujets/ID/
-- /forums/ID/sujets
+- **/users/ID | Login**
+- **/users**
+- **/forums/ID**
+- **/forums**
+- **/sujet/ID**
+- **/sujets**
+- **/messages/ID**
+- **/message**
+- **/forums/ID/sujets/**
+- **/sujets/ID/messages**
 
 POST :
-- /user
-- /forum
-- /sujet
+- **/users**
+- /forums
+- /sujets
 - /messages
-- /forums/ID/sujets/ID/messages
 
 PUT :
-- /user/ID
+- /users/ID
 - /forum/ID
 - /sujet/ID
 - /messages/ID
