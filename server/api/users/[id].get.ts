@@ -17,7 +17,7 @@ export default defineWrappedResponseHandler(async (event) => {
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "id not found"
+            error: "id not found in body"
         }
     }
 });

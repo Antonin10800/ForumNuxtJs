@@ -5,15 +5,11 @@ export default {
   },
   data() {
     return {
+      username: 'user2',
+      password: 'password',
+      admin: false,
       visible: false,
       valid: false,
-      /**
-       * Si isLogged est remplit, l'utilisateur viens pour modifier son profil
-       * Si isLogged est vide, l'utilisateur viens pour s'inscrire
-       */
-      isLogged: '',
-      username: '',
-      password: '',
       rules: {
         required: (value) => !!value || 'Champ requis.',
       },
@@ -30,10 +26,27 @@ export default {
   methods: {
     submit() {
       if (this.valid) {
-        this.$emit('inscriptionvalidated');
+        $fetch('/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: {
+            login: this.username,
+            password: this.password,
+            admin: this.admin,
+          },
+        }).then(async (response) => {
+          if (response.userCreated) {
+            this.$emit('login', this.username)
+            this.$emit('update:inscription', false);
+          } else {
+            console.error('response : ', response.data().error)
+          }
+        }).catch(async (error) => {
+          console.error('error : ', error.response._data.error)
+        })
         this.$emit('update:inscription', false);
-        console.log('Inscription validée')
-        //todo: call api
       }},
   },
 }
@@ -59,6 +72,10 @@ export default {
               type="password"
               required
           ></v-text-field>
+          <v-checkbox v-if="false"
+              v-model="admin"
+              label="Administrateur"
+          ></v-checkbox>
           <v-btn @click="submit">S'inscrire</v-btn>
         </v-form>
       </v-card-text>

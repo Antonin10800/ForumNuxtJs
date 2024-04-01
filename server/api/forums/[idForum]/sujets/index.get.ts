@@ -6,7 +6,7 @@ export default defineWrappedResponseHandler(async (event) => {
         if (event.context.params.idForum === '') {
             setResponseStatus(event, 400)
             return {
-                error: "id not found"
+                error: "idForum not found in params"
             }
         }
         let NbParPage = 5
@@ -60,7 +60,7 @@ export default defineWrappedResponseHandler(async (event) => {
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "id not found"
+            error: "idForum not found in params"
         }
     }
 });

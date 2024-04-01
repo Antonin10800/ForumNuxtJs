@@ -3,10 +3,10 @@ import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql
     if (event.context.params) {
-        if (!event.context.params.id || event.context.params.id === '') {
+        if (!event.context.params.idSujet || event.context.params.idSujet === '') {
             setResponseStatus(event, 400)
             return {
-                error: "id not found"
+                error: "idSujet not found in params"
             }
         } else {
             let NbParPage = 5
@@ -41,7 +41,7 @@ export default defineWrappedResponseHandler(async (event) => {
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "id not found"
+            error: "idSujet not found in params"
         }
     }
 })

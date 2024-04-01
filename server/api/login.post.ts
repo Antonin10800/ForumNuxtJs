@@ -29,7 +29,8 @@ export default defineWrappedResponseHandler(async (event) => {
         }
         setResponseStatus(event, 401)
         return {
-            connected: false
+            connected: false,
+            error: "Login or password incorrect"
         }
     }
 });

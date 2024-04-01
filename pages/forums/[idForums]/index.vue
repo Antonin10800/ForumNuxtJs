@@ -41,7 +41,6 @@ export default {
   <v-container>
 
     <v-row>
-      <v-card-title>Création de sujet</v-card-title>
       <v-col class="justify-center">
         <v-card class="mx-auto my-2"
                 max-width="1000">

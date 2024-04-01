@@ -23,20 +23,29 @@ export default {
     }
   },
   methods: {
-    async submit() {
+    submit() {
       if (this.valid) {
-        const response = await $fetch('/api/login', {
+        $fetch('/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
+          body: {
             login: this.login,
             password: this.password,
-          }),
+          },
+        }).then(async (response) => {
+          if (response.connected) {
+            this.$emit('update:connexion', false);
+            this.$emit('login', this.login)
+          } else {
+            console.log(response.data().error)
+          }
+        }).catch((error) => {
+          console.error(error.response._data.error)
         })
       }
-    }
+    },
   },
 }
 </script>

@@ -5,7 +5,8 @@ import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql
     let body = await readBody(event);
-    if (!body.login || !body.password || !body.admin || body.login === "" || body.password === "") {
+    console.log(body)
+    if (!body.login || !body.password || body.login === "" || body.password === "" || body.admin === undefined) {
         setResponseStatus(event, 400)
         return {
             error: "Information missing"
@@ -18,22 +19,22 @@ export default defineWrappedResponseHandler(async (event) => {
         if (rows.length > 0) {
             setResponseStatus(event, 401)
             return {
-                error: "Login already exists"
+                error: "Username already exists"
             }
         } else {
             let hashedPassword = await bcrypt.hash(body.password, 10);
             let [result] = await db.execute(
-                "INSERT INTO users (login, password) VALUES (?, ?)", [body.login, hashedPassword]
+                "INSERT INTO users (login, password, admin) VALUES (?, ?, ?)", [body.login, hashedPassword, body.admin]
             )
             if (result.affectedRows === 1) {
                 setResponseStatus(event, 201)
                 return {
-                    message: "User created"
+                    userCreated: true
                 }
             } else {
                 setResponseStatus(event, 500)
                 return {
-                    error: "User not created"
+                    error: "issue to create user in db"
                 }
             }
         }

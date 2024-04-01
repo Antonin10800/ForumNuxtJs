@@ -1,8 +1,10 @@
 <script>
 import Inscription from '@/components/Inscription.vue'
 import Connexion from '@/components/Connexion.vue'
-
 export default {
+  props: {
+    login: String,
+  },
   data() {
     return {
       DisplayInscription: false,
@@ -20,8 +22,11 @@ export default {
     Connexion() {
       this.DisplayConnexion = true
     },
-    Deconnexion() {
-      console.log('Deconnexion')
+    async Deconnexion() {
+      this.$emit('logout', '')
+    },
+    emitLogin(login){
+      this.$emit('login', login)
     },
     Home() {
       this.$router.push('/');
@@ -32,7 +37,8 @@ export default {
     updateDisplayInscription(value) {
       this.DisplayInscription = value;
     },
-  }
+  },
+
 }
 </script>
 
@@ -44,22 +50,32 @@ export default {
       <v-btn @click="Home">NuxtForum</v-btn>
     </v-app-bar-title>
 
-
     <v-spacer />
-    <v-btn @click="Connexion">Connexion
-      <v-icon>mdi mdi-login</v-icon>
-    </v-btn>
+    <div v-if="login === '' || login === undefined">
+      <v-btn @click="Connexion">Connexion
+        <v-icon>mdi mdi-login</v-icon>
+        <Connexion
+            :display="DisplayConnexion"
+            @update:connexion="updateDisplayConnexion"
+            @login="emitLogin"
+        />
+      </v-btn>
 
-    <v-btn @click="Deconnexion">Deconnexion
+      <v-btn @click="Inscription">Inscription
+        <v-icon>mdi mdi-login-variant</v-icon>
+        <Inscription
+            :display="DisplayInscription"
+            @update:inscription="updateDisplayInscription"
+            @login="emitLogin"
+        />
+      </v-btn>
+    </div>
+
+    <v-btn v-else @click="Deconnexion">Deconnexion
       <v-icon>mdi mdi-logout</v-icon>
     </v-btn>
 
-    <v-btn @click="Inscription">Inscription
-      <v-icon>mdi mdi-login-variant</v-icon>
-    </v-btn>
 
-    <Connexion :display="DisplayConnexion" @update:connexion="updateDisplayConnexion"/>
-    <Inscription :display="DisplayInscription" @update:inscription="updateDisplayInscription"/>
 
   </v-app-bar>
 
