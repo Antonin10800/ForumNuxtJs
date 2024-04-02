@@ -21,12 +21,17 @@ export default defineWrappedResponseHandler(async (event) => {
             page = pageMax
         }
         let IDpage = (page-1) * NbParPage
-        let query = `SELECT sujets.id, sujets.title, sujets.date, sujets.forum_id, users.login
-                            FROM sujets 
-                                LEFT JOIN forum.users ON users.id = sujets.author_id 
-                            WHERE forum_id = ? 
-                            ORDER BY date 
-                            LIMIT ? OFFSET ?`
+        let query = `SELECT sujets.id, sujets.title, sujets.date, sujets.forum_id, users.login,
+                            (
+                                SELECT MAX(messages.date)
+                                FROM messages
+                                WHERE messages.sujet_id = sujets.id
+                            ) AS last_message_date
+                     FROM sujets
+                              LEFT JOIN users ON users.id = sujets.author_id
+                     WHERE sujets.forum_id = ?
+                     ORDER BY last_message_date DESC
+                         LIMIT ? OFFSET ?`
         let [rows, _] = await db.execute(query, [id, NbParPage, IDpage])
 
         //pour chaque sujet, je veux récupérer le nom du user qui a posté le dernier message
