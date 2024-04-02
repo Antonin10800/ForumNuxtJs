@@ -15,6 +15,7 @@ export default defineNuxtPlugin((nuxtApp) => {
             toast: (msg: string, option:ToastOptions = options) => toast(msg, option),
             success: (msg: string, option:ToastOptions = options) => toast.success(msg, option),
             error: (msg: string, option:ToastOptions = options) => toast.error(msg, option),
+            info: (msg: string, option:ToastOptions = options) => toast.info(msg, option),
         }
     }
 })

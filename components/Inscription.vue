@@ -48,7 +48,7 @@ export default {
             this.$emit('login', this.username)
             this.$emit('update:inscription', false);
           }
-        }).catch(async (error) => {
+        }).catch((error) => {
           if (error.response._data.connected === undefined)
             this.$error(error.response._data.message)
           else
