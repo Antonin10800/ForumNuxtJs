@@ -3,7 +3,7 @@ import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql
     let body = await readBody(event);
-    if (!body.title || !body.author || !body.forum || body.title === "" || isNaN(body.author) || isNaN(body.forum)) {
+    if (!body.title || !body.author || !body.forum || body.title === "" || body.message ==="" || isNaN(body.author) || isNaN(body.forum)) {
         setResponseStatus(event, 400)
         return {
             error: "Information missing"
@@ -21,10 +21,25 @@ export default defineWrappedResponseHandler(async (event) => {
             "INSERT INTO sujets (title, author_id, forum_id, date) VALUES (?, ?, ?, NOW())", [body.title, body.author, body.forum]
         )
         if (result.affectedRows === 1) {
-            setResponseStatus(event, 201)
-            return {
-                message: "Sujet created"
+
+            let [result2] = await db.execute(
+                "INSERT INTO messages (content, date, author_id, sujet_id) values (?, now(), ?,?)", [body.message, body.author, result["insertId"]]
+            )
+            if(result.affectedRows === 1){
+                setResponseStatus(event, 201)
+                return {
+
+                        message: "Sujet/message enregistré"
+
+                }
+            } else {
+                setResponseStatus(event, 500)
+                return {
+                    error: "Sujet not created"
+                }
             }
+
+
         } else {
             setResponseStatus(event, 500)
             return {
