@@ -44,13 +44,15 @@ export default {
           },
         }).then(async (response) => {
           if (response.userCreated) {
+            this.$success('Inscription réussie')
             this.$emit('login', this.username)
             this.$emit('update:inscription', false);
-          } else {
-            console.error('response : ', response.data().error)
           }
         }).catch(async (error) => {
-          console.error('error : ', error.response._data.error)
+          if (error.response._data.connected === undefined)
+            this.$error(error.response._data.message)
+          else
+            this.$error(error.response._data.error)
         })
         this.$emit('update:inscription', false);
       }},
@@ -70,6 +72,7 @@ export default {
               v-model="username"
               :rules="[rules.required]"
               required
+              @keyup.enter="submit"
           ></v-text-field>
           <v-text-field
               label="Mot de passe"
@@ -77,6 +80,7 @@ export default {
               :rules="[rules.required]"
               type="password"
               required
+              @keyup.enter="submit"
           ></v-text-field>
           <v-checkbox v-if="isAdmin"
               v-model="admin"

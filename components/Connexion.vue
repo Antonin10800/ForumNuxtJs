@@ -1,4 +1,6 @@
 <script>
+
+
 export default {
   props: {
     display: Boolean,
@@ -36,13 +38,15 @@ export default {
           },
         }).then(async (response) => {
           if (response.connected) {
+            this.$sucess('Connexion réussie')
             this.$emit('update:connexion', false);
             this.$emit('login', this.login)
-          } else {
-            console.log(response.data().error)
           }
         }).catch((error) => {
-          console.error(error.response._data.error)
+          if (error.response._data.connected === undefined)
+            this.$error(error.response._data.message)
+          else
+            this.$error(error.response._data.error)
         })
       }
     },
@@ -61,6 +65,7 @@ export default {
               v-model="login"
               :rules="[rules.required]"
               required
+              @keyup.enter="submit"
           ></v-text-field>
           <v-text-field
               label="Mot de passe"
@@ -68,6 +73,7 @@ export default {
               :rules="[rules.required]"
               type="password"
               required
+              @keyup.enter="submit"
           ></v-text-field>
           <v-btn @click="submit">Se connecter</v-btn>
         </v-form>
