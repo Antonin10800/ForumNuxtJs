@@ -2,7 +2,7 @@
 import Header from '~/components/Header.vue'
 import {toArray} from "#app/utils.js";
 import {th} from "vuetify/locale";
-// import CreationSujet from "~/components/CreationSujet.vue";
+// import creationSujet from "~/components/CreationSujet.vue";
 export default {
   components: {
     Header,
@@ -13,10 +13,43 @@ export default {
       sujets: null,
       id: this.$route.params.idForums,
       page: 1,
-      pageMax: null
+      pageMax: null,
+      showCreateSujet: false,
+      message:'',
+      titreCreateSujet:''
     };
   },
+
   methods: {
+    async submit(){
+      const {session, refresh} = await useSession();
+      await refresh();
+
+
+
+      const body = {
+        title: this.titreCreateSujet,
+        author: session.value.idUser,
+        forum: this.id,
+        message: this.message
+      };
+      const response = await fetch('/api/sujets', {
+        method:'POST',
+        headers:{
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body)
+      })
+      console.log(response)
+      this.showCreateSujet = false
+      await this.getSujets()
+    },
+    createSujet() {
+      this.message =''
+      this.titreCreateSujet=''
+      this.showCreateSujet = !this.showCreateSujet
+    },
+
     async getSujets() {
       try {
         this.sujets = await $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`);
@@ -37,8 +70,26 @@ export default {
 
 <template>
 
-<!--<CreationSujet></CreationSujet>-->
   <v-container>
+
+    <v-card v-if="showCreateSujet">
+      <v-card-title>
+        <h1 class="text-center mb-8">Création d'un sujet</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-form ref="form">
+          <v-text-field
+              label="Titre"
+              v-model="titreCreateSujet"
+          ></v-text-field>
+          <v-textarea
+              label="Message"
+              v-model="message"
+          ></v-textarea>
+          <v-btn @click="submit">Créer</v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
 
     <v-row>
       <v-col class="justify-center">
@@ -64,7 +115,7 @@ export default {
             <v-card-text v-else>
               <p class="text-center">Aucun sujet</p>
             </v-card-text>
-          <v-btn @click="" color="secondary">Créer un sujet</v-btn>
+          <v-btn @click="createSujet" color="secondary">Créer un sujet</v-btn>
           <v-pagination
               v-model=page
               :length="pageMax"
