@@ -43,10 +43,10 @@ export default {
             this.$emit('login', this.login)
           }
         }).catch((error) => {
-          if (error.response._data.connected === undefined)
-            this.$error(error.response._data.message)
-          else
+          if (error.response._data.error !== undefined)
             this.$error(error.response._data.error)
+          else
+            this.$error(error.response._data.message)
         })
       }
     },
