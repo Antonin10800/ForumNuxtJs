@@ -6,7 +6,7 @@ export default defineWrappedResponseHandler(async (event) => {
         if (event.context.params.idForum === '') {
             setResponseStatus(event, 400)
             return {
-                error: "idForum not found in params"
+                error: "idForum manquant dans les paramètres de la requête"
             }
         }
         let NbParPage = 5
@@ -52,7 +52,7 @@ export default defineWrappedResponseHandler(async (event) => {
         if (Array.isArray(rows) && rows.length === 0) {
             setResponseStatus(event, 204)
             return {
-                error: `Not sujets for this forum : ${id}`
+                error: `Pas de sujets pour ce forum`
             }
         }
         let nombreSujets = rowsNombreSujets[0].nombre_sujets
@@ -65,7 +65,7 @@ export default defineWrappedResponseHandler(async (event) => {
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "idForum not found in params"
+            error: "idForum manquant dans les paramètres de la requête"
         }
     }
 });

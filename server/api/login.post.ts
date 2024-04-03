@@ -8,7 +8,7 @@ export default defineWrappedResponseHandler(async (event) => {
     if (!body.login || body.login === '' || !body.password || body.password === '') {
         setResponseStatus(event, 400)
         return {
-            error: "Login or password missing"
+            error: "Le login ou le mot de passe manquent"
         }
     } else {
         const [rows] = await db.execute(
@@ -30,7 +30,7 @@ export default defineWrappedResponseHandler(async (event) => {
         setResponseStatus(event, 401)
         return {
             connected: false,
-            error: "Login or password incorrect"
+            error: "Login ou Mot de passe incorrect"
         }
     }
 });

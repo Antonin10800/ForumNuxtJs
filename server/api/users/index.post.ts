@@ -9,7 +9,7 @@ export default defineWrappedResponseHandler(async (event) => {
     if (!body.login || !body.password || body.login === "" || body.password === "" || body.admin === undefined) {
         setResponseStatus(event, 400)
         return {
-            error: "Information missing"
+            error: "Informations manquantes"
         }
     } else {
         const [rows] = await db.execute(
@@ -19,7 +19,7 @@ export default defineWrappedResponseHandler(async (event) => {
         if (rows.length > 0) {
             setResponseStatus(event, 401)
             return {
-                error: "Username already exists"
+                error: "Le nom d'utilisateur existe déjà"
             }
         } else {
             let hashedPassword = await bcrypt.hash(body.password, 10);
@@ -34,7 +34,7 @@ export default defineWrappedResponseHandler(async (event) => {
             } else {
                 setResponseStatus(event, 500)
                 return {
-                    error: "issue to create user in db"
+                    error: "problème pour créer l'utilisateur"
                 }
             }
         }

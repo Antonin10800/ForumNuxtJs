@@ -6,7 +6,7 @@ export default defineWrappedResponseHandler(async (event) => {
     if (!body.title || !body.author || !body.forum || body.title === "" || body.message ==="" || isNaN(body.author) || isNaN(body.forum)) {
         setResponseStatus(event, 400)
         return {
-            error: "Information missing"
+            error: "Informations manquantes"
         }
     } else {
         let [author] = await db.execute('SELECT * FROM users WHERE id = ?', [body.author])
@@ -14,7 +14,7 @@ export default defineWrappedResponseHandler(async (event) => {
         if (author.length === 0 || forum.length === 0) {
             setResponseStatus(event, 400)
             return {
-                error: "Author or forum not found"
+                error: "Auteur ou forum inexistant"
             }
         }
         let [result] = await db.execute(
@@ -35,7 +35,7 @@ export default defineWrappedResponseHandler(async (event) => {
             } else {
                 setResponseStatus(event, 500)
                 return {
-                    error: "Sujet not created"
+                    error: "Sujet non crée"
                 }
             }
 
@@ -43,7 +43,7 @@ export default defineWrappedResponseHandler(async (event) => {
         } else {
             setResponseStatus(event, 500)
             return {
-                error: "Sujet not created"
+                error: "Sujet non crée"
             }
         }
     }

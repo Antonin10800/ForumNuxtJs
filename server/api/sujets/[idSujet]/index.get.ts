@@ -9,14 +9,14 @@ export default defineWrappedResponseHandler(async (event) => {
         if (Array.isArray(rows) && rows.length === 0) {
             setResponseStatus(event, 204)
             return {
-                error: `Sujet not found : ${id}`
+                error: `Sujet introuvable : ${id}`
             }
         }
         return rows
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "idSujet not found in body"
+            error: "idSujet manquant dans le body"
         }
     }
 });

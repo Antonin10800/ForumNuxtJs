@@ -10,14 +10,14 @@ export default defineWrappedResponseHandler(async (event) => {
         if (Array.isArray(rows) && rows.length === 0) {
             setResponseStatus(event, 204)
             return {
-                error: `Forums not found : ${id}`
+                error: `Forums introuvable : ${id}`
             }
         }
         return rows
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "idForum not found in body"
+            error: "idForum manquant dans le body"
         }
     }
 });

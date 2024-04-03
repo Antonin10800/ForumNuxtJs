@@ -6,7 +6,7 @@ export default defineWrappedResponseHandler(async (event) => {
         if (!event.context.params.idSujet || event.context.params.idSujet === '') {
             setResponseStatus(event, 400)
             return {
-                error: "idSujet not found in params"
+                error: "idSujet manquant dans les paramètres de la requête"
             }
         } else {
             let NbParPage = 5
@@ -27,7 +27,7 @@ export default defineWrappedResponseHandler(async (event) => {
             if (Array.isArray(rows) && rows.length === 0) {
                 setResponseStatus(event, 204)
                 return {
-                    error: `Not messages for this sujet : ${id}`
+                    error: `Pas de messages pour ce sujet`
                 }
             }
             let nombreSujets = rowsNombreMessages[0].nbMessages
@@ -41,7 +41,7 @@ export default defineWrappedResponseHandler(async (event) => {
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "idSujet not found in params"
+            error: "idSujet manquant dans les paramètres de la requête"
         }
     }
 })

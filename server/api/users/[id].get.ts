@@ -10,14 +10,14 @@ export default defineWrappedResponseHandler(async (event) => {
         if (Array.isArray(rows) && rows.length === 0) {
             setResponseStatus(event, 204)
             return {
-                error: `User not found : ${id}`
+                error: `Utilisateur introuvable : ${id}`
             }
         }
         return rows
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "id not found in body"
+            error: "Identifiant manquant"
         }
     }
 });
