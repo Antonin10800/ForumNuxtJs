@@ -7,7 +7,7 @@ export default defineWrappedResponseHandler(async (event) => {
         const query = `SELECT * FROM sujets WHERE id = ?`
         let [rows, _] = await db.execute(query, [id])
         if (Array.isArray(rows) && rows.length === 0) {
-            setResponseStatus(event, 404)
+            setResponseStatus(event, 204)
             return {
                 error: `Sujet not found : ${id}`
             }

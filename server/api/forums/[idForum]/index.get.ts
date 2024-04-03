@@ -8,7 +8,7 @@ export default defineWrappedResponseHandler(async (event) => {
         const query = `SELECT forums.*, Count(sujets.id) AS nbSujets FROM forums LEFT JOIN sujets ON forums.id = sujets.forum_id WHERE forums.id = ? GROUP BY(forums.id)`
         let [rows, _] = await db.execute(query, [id])
         if (Array.isArray(rows) && rows.length === 0) {
-            setResponseStatus(event, 404)
+            setResponseStatus(event, 204)
             return {
                 error: `Forums not found : ${id}`
             }

@@ -50,7 +50,7 @@ export default defineWrappedResponseHandler(async (event) => {
         }
 
         if (Array.isArray(rows) && rows.length === 0) {
-            setResponseStatus(event, 404)
+            setResponseStatus(event, 204)
             return {
                 error: `Not sujets for this forum : ${id}`
             }

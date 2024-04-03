@@ -8,7 +8,7 @@ export default defineWrappedResponseHandler(async (event) => {
         const query = `SELECT id, login, admin FROM users WHERE id = ? OR login = '?'`
         let [rows, _] = await db.execute(query, [id])
         if (Array.isArray(rows) && rows.length === 0) {
-            setResponseStatus(event, 404)
+            setResponseStatus(event, 204)
             return {
                 error: `User not found : ${id}`
             }

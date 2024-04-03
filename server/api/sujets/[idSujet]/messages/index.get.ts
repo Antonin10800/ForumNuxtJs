@@ -25,7 +25,7 @@ export default defineWrappedResponseHandler(async (event) => {
             let [rows, _] = await db.execute(query, [id, NbParPage, IDpage])
 
             if (Array.isArray(rows) && rows.length === 0) {
-                setResponseStatus(event, 404)
+                setResponseStatus(event, 204)
                 return {
                     error: `Not messages for this sujet : ${id}`
                 }

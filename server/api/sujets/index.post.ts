@@ -12,7 +12,7 @@ export default defineWrappedResponseHandler(async (event) => {
         let [author] = await db.execute('SELECT * FROM users WHERE id = ?', [body.author])
         let [forum] = await db.execute('SELECT * FROM forums WHERE id = ?', [body.forum])
         if (author.length === 0 || forum.length === 0) {
-            setResponseStatus(event, 404)
+            setResponseStatus(event, 400)
             return {
                 error: "Author or forum not found"
             }
