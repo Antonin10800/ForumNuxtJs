@@ -24,23 +24,27 @@ export default {
     async submit(){
       const {session, refresh} = await useSession();
       await refresh();
-
-
-
       const body = {
         title: this.titreCreateSujet,
         author: session.value.idUser,
         forum: this.id,
         message: this.message
       };
-      const response = await fetch('/api/sujets', {
+      $fetch('/api/sujets', {
         method:'POST',
         headers:{
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body)
+        body: body
+      }).then((response) => {
+        console.log(response)
+      }).catch((error) => {
+        if (error.response._data.error !== undefined)
+          this.$error(error.response._data.error)
+        else
+          this.$error(error.response._data.message)
       })
-      console.log(response)
+
       this.showCreateSujet = false
       await this.getSujets()
     },
@@ -51,13 +55,17 @@ export default {
     },
 
     async getSujets() {
-      try {
-        this.sujets = await $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`);
-        this.pageMax = this.sujets.pageMax
-        this.sujets = this.sujets.data
-      } catch (error) {
-        console.error('Erreur lors de la récupération des forums :', error);
-      }
+      $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`)
+        .then((response) => {
+          this.sujets = response
+          this.pageMax = this.sujets.pageMax
+          this.sujets = this.sujets.data
+        }).catch((error) => {
+          if (error.response._data.error !== undefined)
+            this.$error(error.response._data.error)
+          else
+            this.$error(error.response._data.message)
+        })
     },
   },
   async mounted() {
