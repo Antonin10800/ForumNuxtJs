@@ -49,12 +49,11 @@ export default {
             this.$emit('update:inscription', false);
           }
         }).catch((error) => {
-          if (error.response._data.connected === undefined)
-            this.$error(error.response._data.message)
-          else
+          if (error.response._data.error !== undefined)
             this.$error(error.response._data.error)
+          else
+            this.$error(error.response._data.message)
         })
-        this.$emit('update:inscription', false);
       }},
   },
 }
