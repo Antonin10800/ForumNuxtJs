@@ -50,7 +50,7 @@ export default defineWrappedResponseHandler(async (event) => {
         }
 
         if (Array.isArray(rows) && rows.length === 0) {
-            setResponseStatus(event, 204)
+            setResponseStatus(event, 404)
             return {
                 error: `Pas de sujets pour ce forum`
             }

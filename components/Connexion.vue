@@ -38,7 +38,7 @@ export default {
           },
         }).then(async (response) => {
           if (response.connected) {
-            this.$sucess('Connexion réussie')
+            this.$success('Connexion réussie')
             this.$emit('update:connexion', false);
             this.$emit('login', this.login)
           }
@@ -66,6 +66,7 @@ export default {
               :rules="[rules.required]"
               required
               @keyup.enter="submit"
+              autofocus
           ></v-text-field>
           <v-text-field
               label="Mot de passe"

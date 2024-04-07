@@ -19,18 +19,24 @@ export default {
       const {update} = await useSession();
       this.login = newVal
       await update({login: newVal});
-      $fetch(`/api/users/${this.login}`, {
-        method: 'GET',
-      }).then(async (response) => {
-        this.idUser = response.idUser;
-        this.admin = response.admin;
+      if (newVal !== '') {
+        $fetch(`/api/users/${this.login}`, {
+          method: 'GET',
+        }).then(async (response) => {
+          this.idUser = response.id;
+          this.admin = response.admin;
+          await update({idUser: this.idUser, admin: this.admin});
+        }).catch((error) => {
+          if (error.response._data.error !== undefined)
+            this.$error(error.response._data.error)
+          else
+            this.$error(error.response._data.message)
+        })
+      } else {
+        this.idUser = '';
+        this.admin = false;
         await update({idUser: this.idUser, admin: this.admin});
-      }).catch((error) => {
-        console.error(error.response._data.error)
-      })
-
-      await update({login: newVal});
-
+      }
     }
   },
 }

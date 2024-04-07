@@ -5,8 +5,8 @@ export default {
   },
   data() {
     return {
-      username: 'user2',
-      password: 'password',
+      username: '',
+      password: '',
       isAdmin: false,
       admin: false,
       visible: false,
@@ -72,6 +72,7 @@ export default {
               :rules="[rules.required]"
               required
               @keyup.enter="submit"
+              autofocus
           ></v-text-field>
           <v-text-field
               label="Mot de passe"

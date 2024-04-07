@@ -57,10 +57,13 @@ export default {
     async getSujets() {
       $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`)
         .then((response) => {
-          this.sujets = response
-          this.pageMax = this.sujets.pageMax
-          this.sujets = this.sujets.data
+          if (response !== undefined){
+            this.sujets = response
+            this.pageMax = this.sujets.pageMax
+            this.sujets = this.sujets.data
+          }
         }).catch((error) => {
+          console.log('coucou',error)
           if (error.response._data.error !== undefined)
             this.$error(error.response._data.error)
           else
