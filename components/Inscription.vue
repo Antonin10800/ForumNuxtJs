@@ -33,7 +33,7 @@ export default {
     submit() {
       if (this.valid) {
         $fetch('/api/users', {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },

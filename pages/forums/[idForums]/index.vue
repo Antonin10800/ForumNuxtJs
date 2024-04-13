@@ -31,7 +31,7 @@ export default {
         message: this.message
       };
       $fetch('/api/sujets', {
-        method:'POST',
+        method:'PUT',
         headers:{
           "Content-Type": "application/json",
         },
@@ -58,9 +58,8 @@ export default {
       $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`)
         .then((response) => {
           if (response !== undefined){
-            this.sujets = response
-            this.pageMax = this.sujets.pageMax
-            this.sujets = this.sujets.data
+            this.pageMax = response.pageMax
+            this.sujets = response.data
           }
         }).catch((error) => {
           console.log('coucou',error)
@@ -70,6 +69,20 @@ export default {
             this.$error(error.response._data.message)
         })
     },
+  },
+  computed: {
+    formattedDate() {
+      return (date) => {
+        if (!date) return ''
+        let d = new Date(date)
+        let day = ("0" + d.getUTCDate()).slice(-2)
+        let month = ("0" + (d.getUTCMonth() + 1)).slice(-2)
+        let year = d.getUTCFullYear()
+        let hours = ("0" + d.getUTCHours()).slice(-2)
+        let minutes = ("0" + d.getUTCMinutes()).slice(-2)
+        return `${hours}:${minutes} ${day}/${month}/${year}`
+      }
+    }
   },
   async mounted() {
     await this.getSujets()
@@ -116,8 +129,8 @@ export default {
                   <nuxt-link :to="`/forums/${sujet.forum_id}/sujets/${sujet.id}`" class="text-decoration-none text-h6">
                   <v-list-item-title>{{ sujet.title }}</v-list-item-title>
                   <v-list-item-subtitle>Auteur : {{ sujet.login }}</v-list-item-subtitle>
-                    <v-list-item-title>Date de parution : ({{ sujet.date }})</v-list-item-title>
-                    <v-list-item-title>Dernier message de : </v-list-item-title>
+                    <v-list-item-title>Date de parution : {{ formattedDate(sujet.date) }}</v-list-item-title>
+                    <v-list-item-title>Dernier message de : {{ sujet.last_message_author }}</v-list-item-title>
                   </nuxt-link>
                 </v-list-item>
 

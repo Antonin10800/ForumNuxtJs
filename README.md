@@ -22,16 +22,16 @@ GET :
 - **/sujets/ID/messages**
 
 POST :
-- **/users**
-- /forums
-- /sujets
-- /messages
+- /users/ID
+- /forums/ID
+- /sujets/ID
+- /messages/ID
 
 PUT :
-- /users/ID
-- /forum/ID
-- /sujet/ID
-- /messages/ID
+- **/users**
+- /forum
+- **/sujet**
+- /messages
 
 DELETE :
 - /forum/ID
