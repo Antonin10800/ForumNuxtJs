@@ -5,7 +5,6 @@ import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql
     let body = await readBody(event);
-    console.log(body)
     if (!body.login || !body.password || body.login === "" || body.password === "" || body.admin === undefined) {
         setResponseStatus(event, 400)
         return {

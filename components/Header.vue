@@ -9,6 +9,7 @@ export default {
     return {
       DisplayInscription: false,
       DisplayConnexion: false,
+      DisplayAccount: false,
     }
   },
   components: {
@@ -21,6 +22,9 @@ export default {
     },
     Connexion() {
       this.DisplayConnexion = true
+    },
+    account() {
+      this.DisplayAccount = true
     },
     async Deconnexion() {
       this.$emit('logout', '')
@@ -36,6 +40,9 @@ export default {
     },
     updateDisplayInscription(value) {
       this.DisplayInscription = value;
+    },
+    updateDisplayAccount(value) {
+      this.DisplayAccount = value;
     },
   },
 
@@ -71,9 +78,20 @@ export default {
       </v-btn>
     </div>
 
-    <v-btn v-else @click="Deconnexion">Deconnexion
-      <v-icon>mdi mdi-logout</v-icon>
-    </v-btn>
+    <div v-else>
+      <v-btn @click="Deconnexion">Déconnexion
+        <v-icon>mdi mdi-logout</v-icon>
+      </v-btn>
+
+      <v-btn @click="account">Mon compte
+        <v-icon>mdi mdi-account</v-icon>
+        <Compte
+            :display="DisplayAccount"
+            @update:account="updateDisplayAccount"
+        />
+      </v-btn>
+    </div>
+
 
 
 
