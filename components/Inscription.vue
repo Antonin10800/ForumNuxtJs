@@ -2,12 +2,12 @@
 export default {
   props: {
     display: Boolean,
+    isAdmin: Boolean,
   },
   data() {
     return {
       username: '',
       password: '',
-      isAdmin: false,
       admin: false,
       visible: false,
       valid: false,
@@ -15,11 +15,6 @@ export default {
         required: (value) => !!value || 'Champ requis.',
       },
     }
-  },
-  async monted() {
-    const {session, refresh} = await useSession();
-    await refresh();
-    if(session.value.admin !== undefined) this.isAdmin = session.value.admin;
   },
   watch: {
     display(newVal) {
@@ -62,7 +57,8 @@ export default {
 <template>
   <v-dialog v-model="visible">
     <v-card>
-      <v-card-title>S'inscire</v-card-title>
+      <v-card-title v-if="isAdmin">Inscire un utilisateur</v-card-title>
+      <v-card-title v-else>S'inscire</v-card-title>
 
       <v-card-text>
         <v-form ref="form" v-model="valid">

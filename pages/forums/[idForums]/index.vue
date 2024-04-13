@@ -16,7 +16,8 @@ export default {
       pageMax: null,
       showCreateSujet: false,
       message:'',
-      titreCreateSujet:''
+      titreCreateSujet:'',
+      displayCreateSujet: false,
     };
   },
 
@@ -85,6 +86,19 @@ export default {
     }
   },
   async mounted() {
+    const {session} = await useSession();
+    if (session.value && session.value.login !== ''){
+      this.displayCreateSujet = true
+    }
+    document.addEventListener('connected', async () => {
+      const {session} = await useSession();
+      if (session.value && session.value.login !== ''){
+        this.displayCreateSujet = true
+      }
+    })
+    document.addEventListener('disconnected', async () => {
+      this.displayCreateSujet = false
+    })
     await this.getSujets()
   },
 
@@ -119,6 +133,7 @@ export default {
       <v-col class="justify-center">
         <v-card class="mx-auto my-2"
                 max-width="1000">
+          <v-btn v-if="displayCreateSujet" @click="createSujet" color="secondary">Créer un sujet</v-btn>
           <v-card-title>
             <h1 class="text-center mb-8">Forums</h1>
           </v-card-title>
@@ -139,7 +154,6 @@ export default {
             <v-card-text v-else>
               <p class="text-center">Aucun sujet</p>
             </v-card-text>
-          <v-btn @click="createSujet" color="secondary">Créer un sujet</v-btn>
           <v-pagination
               v-model=page
               :length="pageMax"

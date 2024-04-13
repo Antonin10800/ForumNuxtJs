@@ -17,10 +17,8 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-session',
   ],
   nitro: {
-    esbuild: {
-      options: {
-        target: 'esnext'
-      }
+    experimental: {
+      websocket: true
     }
   },
   vite: {

@@ -22,7 +22,7 @@ export default defineWrappedResponseHandler(async (event) => {
                     user: {
                         id: rows[0].id,
                         login: rows[0].login,
-                        admin: rows[0].admin
+                        admin: rows[0].isAdmin
                     }
                 }
             }

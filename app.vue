@@ -10,9 +10,10 @@ export default {
   async mounted(){
     const {session, refresh} = await useSession();
     await refresh();
+    console.log(session.value.admin)
     if (session.value.login) this.login = session.value.login;
     if (session.value.idUser) this.idUser = session.value.idUser;
-    if (session.value.admin) this.admin = session.value.admin;
+    if (session.value.admin) this.admin = session.value.isAdmin;
   },
   methods: {
     async updateLogin(newVal){
@@ -23,8 +24,10 @@ export default {
         $fetch(`/api/users/${this.login}`, {
           method: 'GET',
         }).then(async (response) => {
+          console.log("response", response)
           this.idUser = response.id;
           this.admin = response.admin;
+          console.log("updatelogin", this.idUser, this.admin)
           await update({idUser: this.idUser, admin: this.admin});
         }).catch((error) => {
           if (error.response._data.error !== undefined)
@@ -46,7 +49,8 @@ export default {
 <template>
   <NuxtLayout>
     <v-app>
-        <Header :login="login" @login="updateLogin" @logout="updateLogin" class="header"/>
+      <h1>app : {{admin}}</h1>
+        <Header :login="login" :isAdmin="admin" @login="updateLogin" @logout="updateLogin" class="header"/>
       <NuxtPage />
     </v-app>
   </NuxtLayout>

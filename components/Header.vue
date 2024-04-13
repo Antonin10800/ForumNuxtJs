@@ -4,6 +4,7 @@ import Connexion from '@/components/Connexion.vue'
 export default {
   props: {
     login: String,
+    isAdmin: Boolean,
   },
   data() {
     return {
@@ -27,6 +28,8 @@ export default {
       this.DisplayAccount = true
     },
     async Deconnexion() {
+      let event = new Event('disconnected')
+      document.dispatchEvent(event)
       this.$emit('logout', '')
     },
     emitLogin(login){
@@ -45,7 +48,6 @@ export default {
       this.DisplayAccount = value;
     },
   },
-
 }
 </script>
 
@@ -58,27 +60,28 @@ export default {
     </v-app-bar-title>
 
     <v-spacer />
-    <div v-if="login === '' || login === undefined">
-      <v-btn @click="Connexion">Connexion
-        <v-icon>mdi mdi-login</v-icon>
-        <Connexion
-            :display="DisplayConnexion"
-            @update:connexion="updateDisplayConnexion"
-            @login="emitLogin"
-        />
-      </v-btn>
+    <h1>header : {{isAdmin}}</h1>
+    <v-btn v-if="login === '' || login === undefined || isAdmin" @click="Inscription">Inscription
+      <v-icon>mdi mdi-login-variant</v-icon>
+      <Inscription
+          :display="DisplayInscription"
+          :isAdmin="isAdmin"
+          @update:inscription="updateDisplayInscription"
+          @login="emitLogin"
+      />
+    </v-btn>
 
-      <v-btn @click="Inscription">Inscription
-        <v-icon>mdi mdi-login-variant</v-icon>
-        <Inscription
-            :display="DisplayInscription"
-            @update:inscription="updateDisplayInscription"
-            @login="emitLogin"
-        />
-      </v-btn>
-    </div>
+    <v-btn v-if="login === '' || login === undefined" @click="Connexion">Connexion
+      <v-icon>mdi mdi-login</v-icon>
+      <Connexion
+          :display="DisplayConnexion"
+          @update:connexion="updateDisplayConnexion"
+          @login="emitLogin"
+      />
+    </v-btn>
 
     <div v-else>
+
       <v-btn @click="Deconnexion">Déconnexion
         <v-icon>mdi mdi-logout</v-icon>
       </v-btn>
