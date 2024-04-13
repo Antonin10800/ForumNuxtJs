@@ -60,7 +60,6 @@ export default {
     </v-app-bar-title>
 
     <v-spacer />
-    <h1>header : {{isAdmin}}</h1>
     <v-btn v-if="login === '' || login === undefined || isAdmin" @click="Inscription">Inscription
       <v-icon>mdi mdi-login-variant</v-icon>
       <Inscription

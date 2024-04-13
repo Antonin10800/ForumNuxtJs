@@ -49,7 +49,6 @@ export default {
 <template>
   <NuxtLayout>
     <v-app>
-      <h1>app : {{admin}}</h1>
         <Header :login="login" :isAdmin="admin" @login="updateLogin" @logout="updateLogin" class="header"/>
       <NuxtPage />
     </v-app>
