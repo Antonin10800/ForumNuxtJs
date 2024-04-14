@@ -11,7 +11,7 @@ export default defineWrappedResponseHandler(async (event) => {
         } else {
             let NbParPage = 5
             let page = parseInt(<string>getQuery(event).page) || 1
-            let id = event.context.params.id
+            let id = event.context.params.idSujet
 
             let queryNombreMessages = "SELECT COUNT(*) as nbMessages FROM messages WHERE sujet_id = ?"
             let [rowsNombreMessages, __] = await db.execute(queryNombreMessages, [id])
