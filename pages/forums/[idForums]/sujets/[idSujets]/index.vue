@@ -22,7 +22,11 @@ export default {
         this.messages = this.messages.data
         console.log(this.messages)
       } catch (error) {
-        console.error('Erreur lors de la récupération des forums :', error);
+          if (error.response._data.error !== undefined)
+            this.$error(error.response._data.error)
+          else
+            this.$error(error.response._data.message)
+
       }
     },
   },
