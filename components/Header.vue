@@ -28,8 +28,6 @@ export default {
       this.DisplayAccount = true
     },
     async Deconnexion() {
-      let event = new Event('disconnected')
-      document.dispatchEvent(event)
       this.$emit('logout', '')
     },
     emitLogin(login){

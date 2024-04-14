@@ -38,8 +38,6 @@ export default {
           },
         }).then(async (response) => {
           if (response.connected) {
-            let event = new Event('connected')
-            document.dispatchEvent(event)
             this.$success('Connexion réussie')
             this.$emit('update:connexion', false);
             this.$emit('login', this.login)

@@ -63,7 +63,6 @@ export default {
             this.sujets = response.data
           }
         }).catch((error) => {
-          console.log('coucou',error)
           if (error.response._data.error !== undefined)
             this.$error(error.response._data.error)
           else
@@ -83,16 +82,17 @@ export default {
         let minutes = ("0" + d.getUTCMinutes()).slice(-2)
         return `${hours}:${minutes} ${day}/${month}/${year}`
       }
-    }
+    },
+
   },
   async mounted() {
-    const {session} = await useSession();
-    if (session.value && session.value.login !== ''){
+    const {session} = await useSession()
+    if (session.value && session.value.login !== '' && session.value.login !== undefined){
       this.displayCreateSujet = true
     }
-    document.addEventListener('connected', async () => {
+    document.addEventListener('connected', async (event) => {
       const {session} = await useSession();
-      if (session.value && session.value.login !== ''){
+      if (session.value && session.value.login !== '' && session.value.login !== undefined){
         this.displayCreateSujet = true
       }
     })
