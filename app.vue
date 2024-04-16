@@ -10,7 +10,11 @@ export default {
   async mounted(){
     const {session, refresh} = await useSession();
     await refresh();
-    if (session.value.login) this.login = session.value.login;
+    if (session.value.login) {
+      this.login = session.value.login;
+      let event = new Event('connected')
+      document.dispatchEvent(event)
+    }
     if (session.value.idUser) this.idUser = session.value.idUser;
     if (session.value.admin) this.admin = session.value.isAdmin;
   },
@@ -44,7 +48,6 @@ export default {
       }
       await update({idUser: this.idUser, admin: this.admin});
       await refresh()
-      console.log(typeEvent)
       let event = new Event(typeEvent)
       document.dispatchEvent(event)
     }

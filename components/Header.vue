@@ -52,7 +52,9 @@ export default {
 
 <template>
   <v-app-bar color="secondary">
-
+    <v-btn @click="$router.go(-1)">
+      <v-icon>mdi-arrow-left</v-icon>
+    </v-btn>
     <v-app-bar-title>
       <v-btn @click="Home">NuxtForum</v-btn>
     </v-app-bar-title>

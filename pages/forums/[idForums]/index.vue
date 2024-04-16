@@ -38,7 +38,7 @@ export default {
         },
         body: body
       }).then((response) => {
-        console.log(response)
+        this.$success(response)
       }).catch((error) => {
         if (error.response._data.error !== undefined)
           this.$error(error.response._data.error)
@@ -100,6 +100,7 @@ export default {
       this.displayCreateSujet = false
     })
     await this.getSujets()
+    await setup()
   },
 
 }

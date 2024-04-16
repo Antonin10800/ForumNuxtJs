@@ -35,7 +35,7 @@ export default {
         const {session, refresh} = await useSession();
         await refresh();
         const response = await $fetch(`/api/sujets/${this.id}/messages`, {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
           },
@@ -61,7 +61,7 @@ export default {
     if (session.value && session.value.login !== '' && session.value.login !== undefined){
       this.displayCreateMessage = true
     }
-    document.addEventListener('connected', async (event) => {
+    document.addEventListener('connected', async () => {
       const {session} = await useSession();
       if (session.value && session.value.login !== '' && session.value.login !== undefined){
         this.displayCreateMessage = true
@@ -77,10 +77,8 @@ export default {
 
 <template>
   <div>
-    <v-btn  v-if="displayCreateMessage" @click="showCreateMessage = !showCreateMessage">
-      {{ showCreateMessage ? 'Annuler' : 'Nouveau Message' }}
-    </v-btn>
-    <v-card v-if="showCreateMessage">
+
+    <v-card v-if="showCreateMessage" class="mx-auto" max-width="800">
       <v-card-title>Nouveau Message</v-card-title>
       <v-card-text>
         <v-textarea v-model="newMessageContent" label="Contenu du Message" />
@@ -91,11 +89,15 @@ export default {
     </v-card>
 
     <div v-if="messages">
+
       <v-card class="mx-auto" max-width="800">
+
         <v-toolbar color="secondary" dark>
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
           <v-toolbar-title>Messages</v-toolbar-title>
-          <v-btn icon><v-icon>mdi-magnify</v-icon></v-btn>
+          <v-btn  v-if="displayCreateMessage" @click="showCreateMessage = !showCreateMessage">
+            {{ showCreateMessage ? 'Annuler' : 'Nouveau Message' }}
+          </v-btn>
         </v-toolbar>
         <v-list>
           <v-list-item v-for="message in messages" :key="message.id">
