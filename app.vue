@@ -1,3 +1,29 @@
+<script setup>
+let ws
+const connect = async () =>{
+  const isSecure = location.protocol === "https:";
+  const url = (isSecure ? "wss://" : "ws://") + location.host + "/_ws";
+  if (ws) {
+    ws.close();
+  }
+  ws = new WebSocket(url);
+  ws.addEventListener("message", (event) => {
+    const message = event.data
+    if (message.includes('refresh')){
+      let event = new Event('refresh')
+      document.dispatchEvent(event)
+    }
+  });
+  await new Promise((resolve) => ws.addEventListener("open", resolve));
+  console.log("ws connecté!");
+  document.addEventListener('newer', async () => {
+    ws.send('newer')
+  })
+};
+
+onMounted(connect);
+</script>
+
 <script>
 export default {
     data() {
@@ -17,6 +43,8 @@ export default {
     }
     if (session.value.idUser) this.idUser = session.value.idUser;
     if (session.value.admin) this.admin = session.value.isAdmin;
+
+
   },
   methods: {
     async updateLogin(newVal){

@@ -18,7 +18,7 @@ export default {
     };
   },
   methods: {
-    async getSujets() {
+    async getMessages() {
       try {
         this.messages = await $fetch(`/api/sujets/${this.id}/messages?page=${this.page}`);
         this.pageMax = this.messages.pageMax;
@@ -34,7 +34,7 @@ export default {
       try {
         const {session, refresh} = await useSession();
         await refresh();
-        const response = await $fetch(`/api/sujets/${this.id}/messages`, {
+        $fetch(`/api/sujets/${this.id}/messages`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -44,8 +44,13 @@ export default {
             author_id: session.value.idUser,
             sujet_id: this.id,
           })
-        });
-        await this.getSujets();
+        }).then((response) => {
+          this.$success(response.success);
+          let event = new Event('newer');
+          document.dispatchEvent(event);
+        })
+
+        await this.getMessages();
         this.newMessageContent = '';
         this.showCreateMessage = false;
       } catch (error) {
@@ -70,7 +75,10 @@ export default {
     document.addEventListener('disconnected', async () => {
       this.displayCreateMessage = false
     })
-    await this.getSujets();
+    document.addEventListener('refresh', async () =>{
+      await this.getMessages();
+    })
+    await this.getMessages();
   },
 }
 </script>
@@ -110,7 +118,7 @@ export default {
             </v-list-item>
           </v-list-item>
         </v-list>
-        <v-pagination v-model=page :length="pageMax" @click="getSujets"/>
+        <v-pagination v-model=page :length="pageMax" @click="getMessages"/>
       </v-card>
     </div>
   </div>

@@ -1,8 +1,5 @@
 <script>
 import Header from '~/components/Header.vue'
-import {toArray} from "#app/utils.js";
-import {th} from "vuetify/locale";
-// import creationSujet from "~/components/CreationSujet.vue";
 export default {
   components: {
     Header,
@@ -23,8 +20,7 @@ export default {
 
   methods: {
     async submit(){
-      const {session, refresh} = await useSession();
-      await refresh();
+      const {session} = await useSession();
       const body = {
         title: this.titreCreateSujet,
         author: session.value.idUser,
@@ -38,7 +34,9 @@ export default {
         },
         body: body
       }).then((response) => {
-        this.$success(response)
+        this.$success(response.success)
+        let event = new Event('newer')
+        document.dispatchEvent(event)
       }).catch((error) => {
         if (error.response._data.error !== undefined)
           this.$error(error.response._data.error)
@@ -99,8 +97,10 @@ export default {
     document.addEventListener('disconnected', async () => {
       this.displayCreateSujet = false
     })
+    document.addEventListener('refresh', async() =>{
+      await this.getSujets()
+    })
     await this.getSujets()
-    await setup()
   },
 
 }

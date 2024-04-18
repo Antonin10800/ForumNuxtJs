@@ -36,6 +36,7 @@ export default {
       forums: [],
     };
   },
+
   async mounted() {
     try {
       this.forums = await $fetch('api/forums');

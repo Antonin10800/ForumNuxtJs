@@ -20,6 +20,9 @@ export default defineWrappedResponseHandler(async (event) => {
             if (page > pageMax) {
                 page = pageMax
             }
+            if (page-1 <= 0) {
+                page = 1
+            }
             let IDpage = (page-1) * NbParPage
             let query = "SELECT messages.id, messages.content, messages.date, messages.sujet_id, users.login FROM messages LEFT JOIN users ON users.id = messages.author_id WHERE sujet_id = ? ORDER BY date LIMIT ? OFFSET ?"
             let [rows, _] = await db.execute(query, [id, NbParPage, IDpage])

@@ -29,7 +29,7 @@ export default defineWrappedResponseHandler(async (event) => {
                 setResponseStatus(event, 201)
                 return {
 
-                        message: "Sujet/message enregistré"
+                        success: "Sujet crée avec succès"
 
                 }
             } else {

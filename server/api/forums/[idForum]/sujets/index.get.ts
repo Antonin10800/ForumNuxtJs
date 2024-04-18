@@ -9,7 +9,7 @@ export default defineWrappedResponseHandler(async (event) => {
                 error: "idForum manquant dans les paramètres de la requête"
             }
         }
-        let NbParPage = 5
+        let NbParPage = 10
         let page = parseInt(<string>getQuery(event).page) || 1
         let id = event.context.params.idForum
 
@@ -19,6 +19,9 @@ export default defineWrappedResponseHandler(async (event) => {
         let pageMax = Math.ceil(rowsNombreSujets[0].nombre_sujets / NbParPage) - 1
         if (page > pageMax) {
             page = pageMax
+        }
+        if (page-1 <= 0) {
+            page = 1
         }
         let IDpage = (page-1) * NbParPage
         let query = `SELECT sujets.id, sujets.title, sujets.date, sujets.forum_id, users.login,
