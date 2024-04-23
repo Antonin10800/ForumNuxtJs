@@ -9,21 +9,19 @@ export default defineWrappedResponseHandler(async (event) => {
                 error: "idForum manquant dans les paramètres de la requête"
             }
         }
-        let NbParPage = 10
+        let NbParPage = 5
         let page = parseInt(<string>getQuery(event).page) || 1
         let id = event.context.params.idForum
 
         let queryNombreSujets = "SELECT COUNT(*) as nombre_sujets FROM sujets WHERE forum_id = ?"
         let [rowsNombreSujets, __] = await db.execute(queryNombreSujets, [id])
 
-        let pageMax = Math.ceil(rowsNombreSujets[0].nombre_sujets / NbParPage) - 1
+        let pageMax = Math.ceil(rowsNombreSujets[0].nombre_sujets / NbParPage)
         if (page > pageMax) {
             page = pageMax
         }
-        if (page-1 <= 0) {
-            page = 1
-        }
-        let IDpage = (page-1) * NbParPage
+
+        let indice = (page-1) * NbParPage
         let query = `SELECT sujets.id, sujets.title, sujets.date, sujets.forum_id, users.login,
                             (
                                 SELECT MAX(messages.date)
@@ -35,7 +33,7 @@ export default defineWrappedResponseHandler(async (event) => {
                      WHERE sujets.forum_id = ?
                      ORDER BY last_message_date DESC
                          LIMIT ? OFFSET ?`
-        let [rows, _] = await db.execute(query, [id, NbParPage, IDpage])
+        let [rows, _] = await db.execute(query, [id, NbParPage, indice])
 
         //pour chaque sujet, je veux récupérer le nom du user qui a posté le dernier message
         for (let i = 0; i < rows.length; i++) {
