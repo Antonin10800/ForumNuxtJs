@@ -1,6 +1,5 @@
 <script>
-import Header from '~/components/Header.vue'
-import { toArray } from "#app/utils.js";
+import Header from '~/components/Header.vue';
 
 export default {
   components: {
@@ -9,20 +8,22 @@ export default {
   data() {
     return {
       messages: null,
-      id: this.$route.params.idSujets,
+      idSujet: this.$route.params.idSujets,
       page: 1,
       pageMax: null,
       newMessageContent: '',
       showCreateMessage: false,
       displayCreateMessage : false,
       loginUser:undefined,
-      isAdmin: false
+      isAdmin: false,
+      isEditMessage: false,
+      idMessageEditing: undefined,
     };
   },
   methods: {
     async getMessages() {
       try {
-        this.messages = await $fetch(`/api/sujets/${this.id}/messages?page=${this.page}`);
+        this.messages = await $fetch(`/api/sujets/${this.idSujet}/messages?page=${this.page}`);
         this.pageMax = this.messages.pageMax;
         this.messages = this.messages.data;
       } catch (error) {
@@ -62,6 +63,32 @@ export default {
         else
           this.$error(error.response._data.message);
       }
+    },
+    async editMessage(id) {
+      this.idMessageEditing = id;
+      if (this.isEditMessage){
+        $fetch(`/api/sujets/${this.idSujet}/messages/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: {
+            content: this.messages.find(message => message.id === id).content,
+          }
+        }).then(async (response) => {
+          this.$success(response.message);
+          // let event = new Event('newer');
+          // document.dispatchEvent(event);
+          // await this.getMessages()
+        }).catch((error) => {
+          if (error.response._data.error !== undefined)
+            this.$error(error.response._data.error);
+          else
+            this.$error(error.response._data.message);
+        })
+      }
+      this.isEditMessage = !this.isEditMessage;
+
     }
   },
   async mounted() {
@@ -116,10 +143,11 @@ export default {
         <v-list>
           <v-list-item v-for="message in messages" :key="message.id">
             <v-list-item>
-              {{message.login}}
+              <strong>{{message.login}}</strong>
             </v-list-item>
             <v-list-item>
-              <v-list-item-title>{{message.content}}</v-list-item-title>
+              <v-textarea v-if="isEditMessage && message.id === idMessageEditing" v-model="message.content" label="Contenu du Message" />
+              <v-list-item-title v-else>{{message.content}}</v-list-item-title>
               <v-list-item-subtitle>{{message.date}}</v-list-item-subtitle>
             </v-list-item>
             <v-list-item v-if="loginUser === message.login || isAdmin" class="d-flex flex-row-reverse">

@@ -17,7 +17,7 @@ export default defineWrappedResponseHandler(async (event) => {
     } else {
         setResponseStatus(event, 400)
         return {
-            error: "idForum manquant dans le body"
+            error: "idForum manquant dans les paramètres de la requête"
         }
     }
 });
