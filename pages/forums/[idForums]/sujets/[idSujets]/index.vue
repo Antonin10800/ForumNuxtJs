@@ -89,7 +89,27 @@ export default {
       }
       this.isEditMessage = !this.isEditMessage;
 
-    }
+    },
+    deleteMessage(id){
+      if (confirm('Êtes-vous sûr de vouloir supprimer ce message ?')){
+        $fetch(`/api/sujets/${this.idSujet}/messages/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(async (response) => {
+          this.$success(response.message);
+          let event = new Event('newer');
+          document.dispatchEvent(event);
+          await this.getMessages()
+        }).catch((error) => {
+          if (error.response._data.error !== undefined)
+            this.$error(error.response._data.error);
+          else
+            this.$error(error.response._data.message);
+        })
+      }
+    },
   },
   async mounted() {
     const {session} = await useSession()
@@ -100,6 +120,9 @@ export default {
     document.addEventListener('connected', async () => {
       const {session} = await useSession();
       if (session.value && session.value.login !== '' && session.value.login !== undefined){
+        if(session.value.admin)
+          this.isAdmin = true
+
         this.displayCreateMessage = true
         this.loginUser = session.value.login;
       }
@@ -107,6 +130,7 @@ export default {
     document.addEventListener('disconnected', async () => {
       this.displayCreateMessage = false
       this.loginUser = undefined;
+      this.isAdmin = false
     })
     document.addEventListener('refresh', async () =>{
       await this.getMessages();
@@ -129,7 +153,7 @@ export default {
       </v-card-actions>
     </v-card>
 
-    <div v-if="messages">
+    <div v-if="messages" class="ma-5">
 
       <v-card class="mx-auto" max-width="800">
 
@@ -151,7 +175,15 @@ export default {
               <v-list-item-subtitle>{{message.date}}</v-list-item-subtitle>
             </v-list-item>
             <v-list-item v-if="loginUser === message.login || isAdmin" class="d-flex flex-row-reverse">
-              <v-btn color="secondary" @click="editMessage(message.id)">Modifier</v-btn>
+              <v-btn v-if="!isEditMessage" @click="editMessage(message.id)" class="edit ma-1" icon>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn v-else  @click="editMessage(message.id)" class="edit ma-1" color="secondary" icon>
+                <v-icon>mdi-check</v-icon>
+              </v-btn>
+              <v-btn @click="deleteMessage(message.id)" class="delete ma-1" color="error" icon>
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
             </v-list-item>
           </v-list-item>
         </v-list>
