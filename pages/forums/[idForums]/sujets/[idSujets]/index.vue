@@ -15,6 +15,8 @@ export default {
       newMessageContent: '',
       showCreateMessage: false,
       displayCreateMessage : false,
+      loginUser:undefined,
+      isAdmin: false
     };
   },
   methods: {
@@ -44,10 +46,11 @@ export default {
             author_id: session.value.idUser,
             sujet_id: this.id,
           })
-        }).then((response) => {
+        }).then(async (response) => {
           this.$success(response.success);
           let event = new Event('newer');
           document.dispatchEvent(event);
+          await this.getMessages()
         })
 
         await this.getMessages();
@@ -65,15 +68,18 @@ export default {
     const {session} = await useSession()
     if (session.value && session.value.login !== '' && session.value.login !== undefined){
       this.displayCreateMessage = true
+      this.loginUser = session.value.login;
     }
     document.addEventListener('connected', async () => {
       const {session} = await useSession();
       if (session.value && session.value.login !== '' && session.value.login !== undefined){
         this.displayCreateMessage = true
+        this.loginUser = session.value.login;
       }
     })
     document.addEventListener('disconnected', async () => {
       this.displayCreateMessage = false
+      this.loginUser = undefined;
     })
     document.addEventListener('refresh', async () =>{
       await this.getMessages();
@@ -116,6 +122,9 @@ export default {
               <v-list-item-title>{{message.content}}</v-list-item-title>
               <v-list-item-subtitle>{{message.date}}</v-list-item-subtitle>
             </v-list-item>
+            <v-list-item v-if="loginUser === message.login || isAdmin" class="d-flex flex-row-reverse">
+              <v-btn color="secondary" @click="editMessage(message.id)">Modifier</v-btn>
+            </v-list-item>
           </v-list-item>
         </v-list>
         <v-pagination v-model=page :length="pageMax" @click="getMessages"/>
@@ -125,7 +134,5 @@ export default {
 </template>
 
 <style scoped>
-.v-card {
-  margin-top: 80px;
-}
+
 </style>

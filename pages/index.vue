@@ -99,7 +99,7 @@ export default {
     async confirmEdit(forumId, newTitle) {
       try {
         const response = await $fetch(`api/forums/${forumId}`, {
-          method: 'PUT',
+          method: 'POST',
           body: JSON.stringify({ idForum: forumId, title: newTitle }),
           headers: {
             'Content-Type': 'application/json'
@@ -119,7 +119,7 @@ export default {
     async createForum() {
       try {
         const response = await $fetch('api/forums', {
-          method: 'POST',
+          method: 'PUT',
           body: JSON.stringify({ title: this.newForumTitle }),
           headers: {
             'Content-Type': 'application/json'

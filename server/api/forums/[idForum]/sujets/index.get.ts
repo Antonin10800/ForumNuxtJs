@@ -9,7 +9,7 @@ export default defineWrappedResponseHandler(async (event) => {
                 error: "idForum manquant dans les paramètres de la requête"
             }
         }
-        let NbParPage = 5
+        let NbParPage = 10
         let page = parseInt(<string>getQuery(event).page) || 1
         let id = event.context.params.idForum
 
