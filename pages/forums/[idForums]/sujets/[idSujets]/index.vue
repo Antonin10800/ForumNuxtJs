@@ -22,6 +22,7 @@ export default {
   },
   methods: {
     async getMessages() {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       try {
         this.messages = await $fetch(`/api/sujets/${this.idSujet}/messages?page=${this.page}`);
         this.pageMax = this.messages.pageMax;

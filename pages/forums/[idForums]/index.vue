@@ -54,6 +54,7 @@ export default {
     },
 
     async getSujets() {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`)
         .then((response) => {
           if (response !== undefined){
