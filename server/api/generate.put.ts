@@ -31,6 +31,8 @@ export default defineWrappedResponseHandler(async (event) => {
         try {
             const {nbForumMin, nbForumMax, nbSujetMin, nbSujetMax, nbMessageMin, nbMessageMax, nbUser, nbAdmin} = body
 
+            const insertQuery = `INSERT INTO users (login, password, admin) VALUES ('admin', '$2b$10$9xOJiLAXiAjigbS95RjS8OYfDIeccFeGqNbnLs2clk6z4tak0A5Ly', 1)`
+            await db.execute(insertQuery)
             //generate admins
             for (let i = 0; i < nbAdmin; i++) {
                 const login = fakerFR.internet.userName()

@@ -1,4 +1,4 @@
-# Nuxt dev/build outputs
+# Nuxt dev/Dockerfile outputs
 .output
 .data
 .nuxt

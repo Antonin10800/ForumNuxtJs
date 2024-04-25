@@ -17,7 +17,7 @@ export default defineWrappedResponseHandler(async (event) => {
             const [result] = await db.execute(insertQuery, [title]);
 
             if (result.affectedRows === 1) {
-                return { success: true, message: `Forum "${title}" créé avec succès.` };
+                return { success: true, message: `Forum '${title}' créé avec succès.` };
             } else {
                 return { success: false, message: `Erreur lors de la création du forum.` };
             }

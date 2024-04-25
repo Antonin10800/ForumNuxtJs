@@ -13,7 +13,7 @@ export default defineWrappedResponseHandler(async (event) => {
             }
         } catch (error) {
             console.error("Erreur lors de la suppression du forum :", error);
-            return { success: false, message: "Une erreur s'est produite lors de la suppression du forum." };
+            return { success: false, message: "Une erreur s'est produite lors de la suppression du forum.", error:error };
         }
     } else {
         setResponseStatus(event, 400)
