@@ -4,17 +4,17 @@ export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql;
     let body = await readBody(event);
 
-    if (!body.title) {
+    if (!body.title || !body.author_id) {
         setResponseStatus(event, 400);
         return {
-            error: "Le titre du forum est manquant ou invalide"
+            error: "Le titre du forum ou l'identifiant de l'auteur est manquant ou invalide"
         };
     } else {
         try {
-            const { title } = body;
+            const { title, author_id } = body;
 
-            const insertQuery = `INSERT INTO forums (title) VALUES (?)`;
-            const [result] = await db.execute(insertQuery, [title]);
+            const insertQuery = `INSERT INTO forums (title, author_id) VALUES (?, ?)`;
+            const [result] = await db.execute(insertQuery, [title, author_id]);
 
             if (result.affectedRows === 1) {
                 return { success: true, message: `Forum "${title}" créé avec succès.` };

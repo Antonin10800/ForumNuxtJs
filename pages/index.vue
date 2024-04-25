@@ -5,8 +5,8 @@
         <h1 class="text-center mb-8">ForumNuxt</h1>
 
         <div v-if="isAdmin && editingForumId" class="edit-title">
-          <v-text-field v-model="forumTitle" label="Modifier le titre" outlined></v-text-field>
-          <v-btn @click="confirmEdit(editingForumId, forumTitle)" class="edit" color="primary">
+          <v-text-field class="input" v-model="forumTitle" label="Modifier le titre" outlined></v-text-field>
+          <v-btn @click="confirmEdit(editingForumId, forumTitle)" class="validate" color="primary">
             Valider
           </v-btn>
         </div>
@@ -19,7 +19,7 @@
         </div>
 
         <v-list class="text-center">
-          <v-list-item
+          <list-item
               v-for="forum in forums"
               :key="forum.id"
               class="mb-4 content"
@@ -39,7 +39,7 @@
             <v-btn v-if="isAdmin" @click="confirmDelete(forum.id)" class="delete" color="error" icon>
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-          </v-list-item>
+          </list-item>
         </v-list>
 
       </v-col>
@@ -77,7 +77,7 @@ export default {
         const response = await $fetch(`api/forums/${forumId}`, {
           method: 'DELETE'
         });
-
+  console.log(response)
         if (response) {
           this.$success(`Le forum a été supprimé avec succès`)
           this.forums = this.forums.filter(forum => forum.id !== forumId);
@@ -99,6 +99,7 @@ export default {
     async confirmEdit(forumId, newTitle) {
       try {
         const response = await $fetch(`api/forums/${forumId}`, {
+
           method: 'POST',
           body: JSON.stringify({ idForum: forumId, title: newTitle }),
           headers: {
@@ -118,9 +119,10 @@ export default {
     },
     async createForum() {
       try {
+        const { session } = await useSession();
         const response = await $fetch('api/forums', {
           method: 'PUT',
-          body: JSON.stringify({ title: this.newForumTitle }),
+          body: JSON.stringify({ title: this.newForumTitle, author_id: session.value.idUser,}),
           headers: {
             'Content-Type': 'application/json'
           }
@@ -181,11 +183,13 @@ list-item {
 .delete, .edit {
   margin: 10px;
 }
-.edit-title {
+.edit-title,.create-forum {
   display: flex;
-  align-items: center;
 }
-.create-forum {
-  margin-bottom: 20px;
+
+.create,.validate{
+  margin-top: 10px;
 }
+
+
 </style>
