@@ -19,7 +19,7 @@
         </div>
 
         <v-list class="text-center">
-          <list-item
+          <v-list-item
               v-for="forum in forums"
               :key="forum.id"
               class="mb-4 content"
@@ -39,7 +39,7 @@
             <v-btn v-if="isAdmin" @click="confirmDelete(forum.id)" class="delete" color="error" icon>
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-          </list-item>
+          </v-list-item>
         </v-list>
 
       </v-col>

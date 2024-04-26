@@ -11,14 +11,29 @@
 **Lien vers l'appli :** [http://localhost:3000/](http://localhost:3000/)  
 **Lien vers adminer :** [http://localhost:8080/](http://localhost:8080/)
 
-
+### Requete sur l'api :
+Vous pourrez retrouver un fichier `Insomnia_XXXX-XX-XX.json` à la racine du projet qui contient les requêtes pour l'api.  
+Vous trouverez dans celui-ci une requete paramétrable dans le body `POST /api/generate` qui permet de générer des données aléatoires pour la base de données si celle déjà inséré ne vous convienne pas.
+#### POST /api/generate
+```json
+{
+  "nbForumMin":...,
+  "nbForumMax":...,
+  "nbSujetMin":...,
+  "nbSujetMax":...,
+  "nbMessageMin":...,
+  "nbMessageMax":...,
+  "nbUser":...,
+  "nbAdmin":...
+}
+```
 
 ## Setup for dev :
 
 Après le git clone du projet, exécuter les commandes suivantes pour lancer le projet en mode développement :
 
 ```bash
-docker compose up -d
+docker compose up -d db adminer
 ```
 ```bash
 npm i
@@ -32,8 +47,11 @@ npm run dev
 Après le git clone du projet, exécuter les commandes suivantes pour lancer le projet en mode production :
 
 ```bash
-docker compose up -d
+docker compose up -d 
 ```
+
+La commande peut être longue car le conteneur doit télécharger les dépendances nécessaires pour le projet.  
+Vous pouvez retirer l'option `-d` pour voir les logs du conteneur et savoir quand le serveur sera accessible.
 
 
 ## Informations de connexion BD :

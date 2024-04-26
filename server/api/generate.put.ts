@@ -31,6 +31,12 @@ export default defineWrappedResponseHandler(async (event) => {
         try {
             const {nbForumMin, nbForumMax, nbSujetMin, nbSujetMax, nbMessageMin, nbMessageMax, nbUser, nbAdmin} = body
 
+            //supprimer toutes les données des tables
+            await db.execute('DELETE FROM messages')
+            await db.execute('DELETE FROM sujets')
+            await db.execute('DELETE FROM forums')
+            await db.execute('DELETE FROM users')
+
             const insertQuery = `INSERT INTO users (login, password, admin) VALUES ('admin', '$2b$10$9xOJiLAXiAjigbS95RjS8OYfDIeccFeGqNbnLs2clk6z4tak0A5Ly', 1)`
             await db.execute(insertQuery)
             //generate admins
@@ -51,26 +57,25 @@ export default defineWrappedResponseHandler(async (event) => {
                 await db.execute(insertQuery, [login, password])
             }
 
+            let [author] = await db.execute('SELECT id FROM users WHERE login = "admin"')
+            let idAthor = parseInt(author[0].id)
             // generate forums
             let nbForum = Math.floor(Math.random() * (nbForumMax - nbForumMin + 1)) + nbForumMin
-            console.log('nbForum', nbForum)
             for (let i = 0; i < nbForum; i++) {
                 const title = fakerFR.hacker.noun()
                 const insertQuery = `INSERT INTO forums (title, author_id) VALUES (?, ?)`
-                await db.execute(insertQuery, [title, 1])
+                await db.execute(insertQuery, [title, idAthor])
 
                 // generate sujets
                 let nbSujet = Math.floor(Math.random() * (nbSujetMax - nbSujetMin + 1)) + nbSujetMin
-                console.log('nbSujet', nbSujet)
                 const [forum] = await db.execute('SELECT * FROM forums ORDER BY id DESC LIMIT 1')
                 for (let i = 0; i < nbSujet; i++) {
                     const title = fakerFR.hacker.adjective()
-                    const insertQuery = `INSERT INTO sujets (title, date, forum_id) VALUES (?, NOW(), ?)`
-                    await db.execute(insertQuery, [title, forum[0].id])
+                    const insertQuery = `INSERT INTO sujets (title, date, forum_id, author_id) VALUES (?, NOW(), ?, ?)`
+                    await db.execute(insertQuery, [title, forum[0].id, idAthor])
 
                     // generate messages
                     let nbMessage = Math.floor(Math.random() * (nbMessageMax - nbMessageMin + 1)) + nbMessageMin
-                    console.log('nbMessage', nbMessage)
                     const [sujet] = await db.execute('SELECT * FROM sujets ORDER BY id DESC LIMIT 1')
                     const [users] = await db.execute('SELECT * FROM users')
                     for (let i = 0; i < nbMessage; i++) {

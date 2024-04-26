@@ -117,6 +117,8 @@ export default {
     if (session.value && session.value.login !== '' && session.value.login !== undefined){
       this.displayCreateMessage = true
       this.loginUser = session.value.login;
+      if(session.value.admin)
+        this.isAdmin = true
     }
     document.addEventListener('connected', async () => {
       const {session} = await useSession();

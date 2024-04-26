@@ -9,7 +9,7 @@ export const defineWrappedResponseHandler = <T extends
     defineEventHandler<T>(async event => {
         try {
             event.context.mysql = await mysql.createConnection({
-                host: 'db',
+                host: 'localhost',
                 user: 'user',
                 password: 'password',
                 database: 'forum',
