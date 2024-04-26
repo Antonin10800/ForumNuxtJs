@@ -23,7 +23,10 @@ export default defineWrappedResponseHandler(async (event) => {
 
 
             if (result.affectedRows === 1) {
-                return true;
+                return {
+                    success: true,
+                    message: `Forum supprimé avec succès.`
+                };
             }
         } catch (error) {
             console.error("Erreur lors de la suppression du forum :", error);

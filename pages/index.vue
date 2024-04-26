@@ -6,7 +6,7 @@
 
         <div v-if="isAdmin && editingForumId" class="edit-title">
           <v-text-field class="input" v-model="forumTitle" label="Modifier le titre" outlined></v-text-field>
-          <v-btn @click="confirmEdit(editingForumId, forumTitle)" class="validate" color="primary">
+          <v-btn @click="confirmEdit(editingForumId, forumTitle)" class="validate" color="secondary">
             Valider
           </v-btn>
         </div>
@@ -69,7 +69,7 @@ export default {
       try {
         this.forums = await $fetch('api/forums');
       } catch (error) {
-        console.error('Erreur lors de la récupération des forums :', error);
+        this.$error('Erreur lors de la récupération des forums :', error);
       }
     },
     async deleteForum(forumId) {
@@ -84,7 +84,7 @@ export default {
           this.$error(`Erreur lors de la suppression du forum`)
         }
       } catch (error) {
-        console.error('Erreur lors de la suppression du forum :', error);
+        this.$error('Erreur lors de la suppression du forum :', error);
       }
     },
     async toggleEditForum(forumId) {
@@ -110,10 +110,10 @@ export default {
           await this.getForums();
           this.editingForumId = null;
         } else {
-          this.$error(response.message || 'Erreur lors de la mise à jour du forum');
+          this.$error(response.message);
         }
       } catch (error) {
-        this.$error('Une erreur s\'est produite lors de la mise à jour du forum.');
+        this.$error(error);
       }
     },
     async createForum() {

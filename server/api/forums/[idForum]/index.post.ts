@@ -4,10 +4,10 @@ export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql;
     let body = await readBody(event);
 
-    if (!body.title) {
+    if (!body.title || body.title === '' || !body.idForum || isNaN(body.idForum)) {
         setResponseStatus(event, 400);
         return {
-            error: "Le titre du forum est manquant ou invalide"
+            error: "Le titre ou l'id du forum est manquant ou invalide"
         };
     } else {
         try {

@@ -37,7 +37,7 @@ Vous trouverez dans celui-ci une requete paramétrable dans le body `POST /api/g
 
 ## Setup for dev :
 
-Après le git clone du projet, exécuter les commandes suivantes pour lancer le projet en mode développement :
+Après le git clone du projet, exécuter les commandes suivantes pour lancer le projet en mode développement (attention les port 3306 et 8080 doivent être libres) :
 
 ```bash
 docker compose up -d db adminer
@@ -51,7 +51,7 @@ npm run dev
 
 ## Setup for prod :
 
-Après le git clone du projet, exécuter les commandes suivantes pour lancer le projet en mode production :
+Après le git clone du projet, exécuter la commande suivante pour lancer le projet en mode production (attention les port 3306 et 8080 doivent être libres) :
 
 ```bash
 docker compose up -d 

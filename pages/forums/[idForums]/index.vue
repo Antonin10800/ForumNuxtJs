@@ -8,23 +8,57 @@ export default {
   data() {
     return {
       sujets: null,
-      id: this.$route.params.idForums,
+      idForum: this.$route.params.idForums,
+      idSujet: undefined,
       page: 1,
+      isAdmin: false,
       pageMax: null,
       showCreateSujet: false,
       message:'',
       titreCreateSujet:'',
       displayCreateSujet: false,
+      sujetTitle: '',
+      editingsujetId: null
     };
   },
 
   methods: {
+
+    async toggleEditsujet(sujetId) {
+      this.sujetTitle = '';
+      this.editingsujetId = sujetId === this.editingsujetId ? null : sujetId;
+      const sujetIndex = this.sujets.findIndex(sujet => sujet.id === sujetId);
+      if (sujetIndex !== -1) {
+        this.sujetTitle = this.sujets[sujetIndex].title;
+      }
+    },
+    async confirmEdit(sujetId, newTitle) {
+      try {
+        const response = await $fetch(`/api/sujets/${sujetId}`, {
+          method: 'POST',
+          body: {title: newTitle },
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response && response.success) {
+          this.$success(response.message);
+          await this.getSujets();
+          this.editingsujetId = null;
+        } else {
+          this.$error(response.message);
+        }
+      } catch (error) {
+        this.$error(error);
+      }
+    },
+    
     async submit(){
       const {session} = await useSession();
       const body = {
         title: this.titreCreateSujet,
         author: session.value.idUser,
-        forum: this.id,
+        sujet: this.idSujet,
         message: this.message
       };
       $fetch('/api/sujets', {
@@ -47,6 +81,27 @@ export default {
       this.showCreateSujet = false
       await this.getSujets()
     },
+    confirmDelete(sujetId) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer ce sujet ?')) {
+        this.deletesujet(sujetId);
+      }
+    },
+    async deletesujet(sujetId) {
+      try {
+        const response = await $fetch(`/api/sujets/${sujetId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.success) {
+          this.$success(response.message)
+          await this.getSujets()
+        } else {
+          this.$error(response.message)
+        }
+      } catch (error) {
+        this.$error(error);
+      }
+    },
     createSujet() {
       this.message =''
       this.titreCreateSujet=''
@@ -54,8 +109,7 @@ export default {
     },
 
     async getSujets() {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      $fetch(`/api/forums/${this.id}/sujets?page=${this.page}`)
+      $fetch(`/api/forums/${this.idForum}/sujets?page=${this.page}`)
         .then((response) => {
           if (response !== undefined){
             this.pageMax = response.pageMax
@@ -88,15 +142,20 @@ export default {
     const {session} = await useSession()
     if (session.value && session.value.login !== '' && session.value.login !== undefined){
       this.displayCreateSujet = true
+      if (session.value.admin)
+        this.isAdmin = true
     }
     document.addEventListener('connected', async (event) => {
       const {session} = await useSession();
       if (session.value && session.value.login !== '' && session.value.login !== undefined){
         this.displayCreateSujet = true
+        if (session.value.admin)
+          this.isAdmin = true
       }
     })
     document.addEventListener('disconnected', async () => {
       this.displayCreateSujet = false
+      this.isAdmin = false
     })
     document.addEventListener('refresh', async() =>{
       await this.getSujets()
@@ -131,24 +190,40 @@ export default {
       </v-card-text>
     </v-card>
 
+    <div v-if="isAdmin && editingsujetId" class="edit-title d-flex flex-row">
+      <v-text-field class="input" v-model="sujetTitle" label="Modifier le titre" outlined></v-text-field>
+      <v-btn @click="confirmEdit(editingsujetId, sujetTitle)" class="validate edit" color="secondary">
+        Valider
+      </v-btn>
+    </div>
+
     <v-row>
       <v-col class="justify-center">
         <v-card class="mx-auto my-2"
                 max-width="1000">
           <v-btn v-if="displayCreateSujet" @click="createSujet" color="secondary">Créer un sujet</v-btn>
           <v-card-title>
-            <h1 class="text-center mb-8">Forums</h1>
+            <h1 class="text-center mb-8">sujets</h1>
           </v-card-title>
           <v-card-text v-if="sujets">
             <v-list class="text-center">
 
                 <v-list-item v-for="sujet in sujets" :key="sujet.id" class="mb-4">
-                  <nuxt-link :to="`/forums/${sujet.forum_id}/sujets/${sujet.id}`" class="text-decoration-none text-h6">
+                  
+                  <nuxt-link :to="`/sujets/${sujet.sujet_id}/sujets/${sujet.id}`" class="text-decoration-none text-h6">
                   <v-list-item-title>{{ sujet.title }}</v-list-item-title>
                   <v-list-item-subtitle>Auteur : {{ sujet.login }}</v-list-item-subtitle>
                     <v-list-item-title>Date de parution : {{ formattedDate(sujet.date) }}</v-list-item-title>
                     <v-list-item-title>Dernier message de : {{ sujet.last_message_author }}</v-list-item-title>
                   </nuxt-link>
+
+                  <v-btn v-if="isAdmin" @click="toggleEditsujet(sujet.id)" class="edit ma-1" icon>
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+
+                  <v-btn v-if="isAdmin" @click="confirmDelete(sujet.id)" class="delete ma-1" color="error" icon>
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
                 </v-list-item>
 
             </v-list>
@@ -169,5 +244,8 @@ export default {
 </template>
 
 <style scoped>
-
+.edit{
+  margin-left: 10px;
+  margin-top: 10px;
+}
 </style>
