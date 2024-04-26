@@ -7,6 +7,13 @@
 
 ## Ressources :
 
+### Connexion sur le site :
+
+**Tous les mots de passes des administrateur sont :** `admin`  
+**Tous les mots de passes des utilisateurs sont :** `user`  
+Un utilisateur `admin:admin` est crée par défaut et dans la route de génération de données.  
+Pour les autres utilisateurs, ce sont leur login qui est affiché dans l'application ou vous pouvez les récupérer avec la route `GET /api/users`
+
 ### Lien du projet :  
 **Lien vers l'appli :** [http://localhost:3000/](http://localhost:3000/)  
 **Lien vers adminer :** [http://localhost:8080/](http://localhost:8080/)
