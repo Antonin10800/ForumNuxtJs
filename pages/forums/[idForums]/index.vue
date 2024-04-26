@@ -210,7 +210,7 @@ export default {
 
                 <v-list-item v-for="sujet in sujets" :key="sujet.id" class="mb-4">
                   
-                  <nuxt-link :to="`/sujets/${sujet.sujet_id}/sujets/${sujet.id}`" class="text-decoration-none text-h6">
+                  <nuxt-link :to="`/forums/${this.idForum}/sujets/${sujet.id}`" class="text-decoration-none text-h6">
                   <v-list-item-title>{{ sujet.title }}</v-list-item-title>
                   <v-list-item-subtitle>Auteur : {{ sujet.login }}</v-list-item-subtitle>
                     <v-list-item-title>Date de parution : {{ formattedDate(sujet.date) }}</v-list-item-title>
