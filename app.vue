@@ -15,7 +15,6 @@ const connect = async () =>{
     }
   });
   await new Promise((resolve) => ws.addEventListener("open", resolve));
-  console.log("ws connecté!");
   document.addEventListener('newer', async () => {
     ws.send('newer')
   })

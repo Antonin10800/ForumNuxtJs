@@ -13,13 +13,13 @@
 
         <div v-if="isAdmin" class="create-forum">
           <v-text-field v-model="newForumTitle" label="Titre du nouveau forum" outlined></v-text-field>
-          <v-btn @click="createForum" class="create" color="success">
+          <v-btn @click="createForum" class="create" color="secondary">
             Créer un forum
           </v-btn>
         </div>
 
         <v-list class="text-center">
-          <v-list-item
+          <list-item
               v-for="forum in forums"
               :key="forum.id"
               class="mb-4 content"
@@ -39,7 +39,7 @@
             <v-btn v-if="isAdmin" @click="confirmDelete(forum.id)" class="delete" color="error" icon>
               <v-icon>mdi-delete</v-icon>
             </v-btn>
-          </v-list-item>
+          </list-item>
         </v-list>
 
       </v-col>
@@ -77,7 +77,6 @@ export default {
         const response = await $fetch(`api/forums/${forumId}`, {
           method: 'DELETE'
         });
-  console.log(response)
         if (response) {
           this.$success(`Le forum a été supprimé avec succès`)
           this.forums = this.forums.filter(forum => forum.id !== forumId);
@@ -189,6 +188,7 @@ list-item {
 
 .create,.validate{
   margin-top: 10px;
+  margin-left: 10px
 }
 
 

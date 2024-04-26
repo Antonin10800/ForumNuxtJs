@@ -10,6 +10,7 @@ export const defineWrappedResponseHandler = <T extends
         try {
             event.context.mysql = await mysql.createConnection({
                 host: 'localhost',
+                port: 3306,
                 user: 'user',
                 password: 'password',
                 database: 'forum',
